@@ -50,10 +50,10 @@ public interface ElasticSearchAPI {
     Call<RespuestaB> deleteCazuela(@HeaderMap Map<String, String> headers,
                                    @Body RequestBody params);
 
-    //Llamada para obtener información acerca de una medición. En hits
+    //Llamada para obtener información acerca de una medición. En example
     @POST("/mediciones_sukaldatzen/_search")
-    Call<HitsObjectM> searchMedicion(@HeaderMap Map<String, String> headers,
-                                     @Body RequestBody params);
+    Call<Example> searchMedicion(@HeaderMap Map<String, String> headers,
+                                 @Body RequestBody params);
 
     //Llamada para obtener información acerca de una medición. Con aggregations
     @POST("/mediciones_sukaldatzen/_search?filter_path=aggregations.myAgg.hits.hits._source*")
