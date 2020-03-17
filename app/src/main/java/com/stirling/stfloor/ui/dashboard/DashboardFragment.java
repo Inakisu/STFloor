@@ -1,11 +1,14 @@
 package com.stirling.stfloor.ui.dashboard;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.stirling.stfloor.BluetoothActivity;
 import com.stirling.stfloor.Models.HitsObjects.HitsObjectC;
 import com.stirling.stfloor.Models.gson2pojo.Aggregations;
 import com.stirling.stfloor.Models.gson2pojo.Example;
@@ -52,7 +56,7 @@ public class DashboardFragment extends Fragment {
     private String queryJson = "";
     public  boolean detener;
     private JSONObject jsonObject;
-    private Button btnAnadirDispositivo;
+    private FloatingActionButton btnAnadirDispositivo;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -60,12 +64,7 @@ public class DashboardFragment extends Fragment {
                 ViewModelProviders.of(this).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
         return root;
     }
     @Override
@@ -88,8 +87,17 @@ public class DashboardFragment extends Fragment {
             }
         };
 
-        btnAnadirDispositivo = (ImageView) findViewById(R.id.anadirDispFloatingButton);
+        btnAnadirDispositivo = (FloatingActionButton) view.findViewById(R.id.anadirDispFloatingButton);
         //listener para el botón Añadir Dispositivo, nueva activity
+
+        btnAnadirDispositivo.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(getActivity(), BluetoothActivity.class);
+
+
+            }
+        });
 
     }
 
