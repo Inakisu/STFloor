@@ -45,7 +45,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.stirling.stfloor.Models.BluetoothLE;
 import com.stirling.stfloor.Models.HitsLists.HitsListC;
 import com.stirling.stfloor.Models.POJOs.RespuestaB;
@@ -133,9 +132,6 @@ public class BluetoothActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private ElasticSearchAPI searchAPI;
 
-    FirebaseAuth auth;
-    private String email;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,8 +141,6 @@ public class BluetoothActivity extends AppCompatActivity {
         relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
         ble = new BluetoothLEHelper(this);
-        auth = FirebaseAuth.getInstance();
-        email = auth.getCurrentUser().getEmail();
 
         //Verificamos que el Bluetooth esté encendido, y si no lo está pedimos encenderlo
         if (adapter == null || !adapter.isEnabled()) {
@@ -574,8 +568,6 @@ public class BluetoothActivity extends AppCompatActivity {
             ble.write(Constants.SERVICE_UUID, Constants.PASSWORD_CHARACTERISTIC_UUID,pass);
             Log.i("Enviar info Wifi:", "Enviada contraseña");
 //            busquedaEntrada(obtenidaMACWiFi,email);
-            borrarLaCazuela(obtenidaMACWiFiString, email);
-            addCazuelaUsuario(obtenidaMACWiFiString, email);
         }
     }
 

@@ -94,8 +94,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(getActivity(), BluetoothActivity.class);
-
-
+                startActivity(intent);
             }
         });
 
