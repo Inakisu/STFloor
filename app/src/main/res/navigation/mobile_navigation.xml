@@ -16,6 +16,9 @@
         android:name="com.stirling.stfloor.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
+    <fragment
+        android:id="@+id/navigation_visualizacion"
+        android:name="com.stirling.stfloor.ui.dashboard."
 
     <fragment
         android:id="@+id/navigation_notifications"

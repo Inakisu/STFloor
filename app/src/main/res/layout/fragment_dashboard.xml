@@ -75,6 +75,17 @@
         app:layout_constraintStart_toStartOf="@+id/frameLayout"
         app:srcCompat="@drawable/ic_adddispositivo" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/botonPrueba"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:backgroundTint="#E13078CF"
+        app:layout_constraintBottom_toBottomOf="@+id/anadirDispFloatingButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/anadirDispFloatingButton"
+        app:srcCompat="@drawable/ic_adddispositivo" />
+
     <TextView
         android:id="@+id/text_dashboard2"
         android:layout_width="match_parent"
