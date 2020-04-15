@@ -48,7 +48,6 @@ import static android.content.ContentValues.TAG;
 
 public class DashboardFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
     private Retrofit retrofit;
     private ElasticSearchAPI searchAPI;
     private String macDispositivo;
@@ -57,11 +56,10 @@ public class DashboardFragment extends Fragment {
     public  boolean detener;
     private JSONObject jsonObject;
     private FloatingActionButton btnAnadirDispositivo;
+    private FloatingActionButton btnPrueba;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         final TextView textView = root.findViewById(R.id.text_dashboard);
 
@@ -87,14 +85,23 @@ public class DashboardFragment extends Fragment {
             }
         };
 
+        btnPrueba = (FloatingActionButton) view.findViewById(R.id.botonPrueba);
         btnAnadirDispositivo = (FloatingActionButton) view.findViewById(R.id.anadirDispFloatingButton);
         //listener para el botón Añadir Dispositivo, nueva activity
 
         btnAnadirDispositivo.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                //Abrimos activity de búsqueda de dispositivos BLE para sincronización
                 Intent intent = new Intent(getActivity(), BluetoothActivity.class);
                 startActivity(intent);
+            }
+        });
+        btnPrueba.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //Cambiar a fragment visualización
+
             }
         });
 

@@ -39,28 +39,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/listView1"
-        android:layout_width="390dp"
-        android:layout_height="0dp"
-        android:layout_below="@id/text_dashboard"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+    <Spinner
+        android:id="@+id/spinnerDispDash"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:scrollbarDefaultDelayBeforeFade="5000"
-        android:scrollbarFadeDuration="500"
-        android:scrollbarSize="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/anadirDispFloatingButton"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/botonPrueba"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_dashboard">
+        app:layout_constraintTop_toBottomOf="@+id/text_dashboard" />
 
-    </ListView>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/botonPrueba"
+        android:layout_width="34dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        app:backgroundTint="#E13078CF"
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerDispDash"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spinnerDispDash"
+        app:srcCompat="@drawable/ic_adddispositivo" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/anadirDispFloatingButton"
@@ -73,17 +73,6 @@
         app:layout_constraintBottom_toTopOf="@+id/text_dashboard2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/frameLayout"
-        app:srcCompat="@drawable/ic_adddispositivo" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/botonPrueba"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        app:backgroundTint="#E13078CF"
-        app:layout_constraintBottom_toBottomOf="@+id/anadirDispFloatingButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/anadirDispFloatingButton"
         app:srcCompat="@drawable/ic_adddispositivo" />
 
     <TextView

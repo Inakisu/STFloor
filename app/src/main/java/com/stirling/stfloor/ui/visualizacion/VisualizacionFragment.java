@@ -13,7 +13,6 @@ import com.stirling.stfloor.R;
 
 public class VisualizacionFragment extends Fragment {
 
-    private VisualizacionViewModel mViewModel;
 
     public static VisualizacionFragment newInstance() {
         return new VisualizacionFragment();
@@ -28,7 +27,6 @@ public class VisualizacionFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(VisualizacionViewModel.class);
         // TODO: Use the ViewModel
     }
 
