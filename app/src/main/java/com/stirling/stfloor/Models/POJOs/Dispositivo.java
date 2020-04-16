@@ -1,13 +1,13 @@
 package com.stirling.stfloor.Models.POJOs;
 
-public class Cazuela {
+public class Dispositivo {
 
     private String idMac;
     private String nombreCazuela;
     private String correousu;
     private boolean dueno;
 
-    public Cazuela(){
+    public Dispositivo(){
 
     }
 

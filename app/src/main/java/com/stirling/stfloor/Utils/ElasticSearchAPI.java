@@ -37,7 +37,7 @@ public interface ElasticSearchAPI {
 
     //Llamada para obtener información sobre una medición
     @POST("/stf_mediciones/_search")
-    Call<HitsObjectC> searchCazuela(@HeaderMap Map<String, String> headers,
+    Call<HitsObjectC> searchDisp(@HeaderMap Map<String, String> headers,
                                     @Body RequestBody params);
 
     //Llamada para introducir una cazuela nueva en la base de datos

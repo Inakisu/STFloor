@@ -1,11 +1,10 @@
 package com.stirling.stfloor.ui.dashboard;
 
-import android.app.Activity;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -14,13 +13,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 
+import com.google.gson.Gson;
 import com.stirling.stfloor.BluetoothActivity;
+import com.stirling.stfloor.Models.HitsLists.HitsListC;
 import com.stirling.stfloor.Models.HitsObjects.HitsObjectC;
+import com.stirling.stfloor.Models.POJOs.Dispositivo;
 import com.stirling.stfloor.Models.gson2pojo.Aggregations;
 import com.stirling.stfloor.Models.gson2pojo.Example;
 import com.stirling.stfloor.Models.gson2pojo.Hit;
@@ -34,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.Credentials;
@@ -58,6 +60,10 @@ public class DashboardFragment extends Fragment {
     private FloatingActionButton btnAnadirDispositivo;
     private FloatingActionButton btnPrueba;
 
+    private ArrayAdapter<String> spinnerAdapter;
+    private ArrayList<Dispositivo> mDispositivo; // Lista donde se almacenarán las respuestas de la query de las cazuelas
+    private ArrayList<String> nombreDisps;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
@@ -73,6 +79,17 @@ public class DashboardFragment extends Fragment {
         inicializarAPI();
 
         //Inicializamos variables
+
+        //Obtenemos la lista de dispositivos y la guardamos en SharedPreferences
+        actualizarListaDispositivos();
+
+        //Extraemos de la lista de dispositivos los nombres de éstos y los introducimos en una lista
+        for(int i = 0; i<mDispositivo.size(); i++){
+            String nombreDisp = mDispositivo.get(i).getNombreCazuela(); //todo
+        }
+        //Introducimos datos de la lista obtenida en el spinner
+        spinnerAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,
+                nombreDisps);
 
         //Proceso para actualizar información cada segundo
         final Handler handler = new Handler();
@@ -203,5 +220,93 @@ public class DashboardFragment extends Fragment {
 
         });
 
+    }
+    private void actualizarListaDispositivos(){
+        //Generamos un authentication header para identificarnos contra Elasticsearch
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", Credentials.basic("android",
+                mElasticSearchPassword));
+        try{
+            queryJson = "{\n" +
+                    "  \"query\": {\n" +
+                    "    \"bool\": {\n" +
+                    "      \"must\": [\n" +
+                    "        {\"match_all\": {\n" +
+                    "          \n" +
+                    "        }}\n" +
+                    "      ]\n" +
+                    "    }\n" +
+                    "  },\n" +
+                    "  \"aggs\": {\n" +
+                    "    \"myAgg\": {\n" +
+                    "      \"top_hits\": {\n" +
+                    "        \"size\": 99,\n" +
+                    "        \"sort\": [\n" +
+                    "          {\n" +
+                    "            \"timestamp\":{\n" +
+                    "              \"order\": \"desc\"\n" +
+                    "            }\n" +
+                    "          }]\n" +
+                    "      }\n" +
+                    "    }\n" +
+                    "  }\n" +
+                    "}";
+            jsonObject = new JSONObject(queryJson);
+        }catch (JSONException jerr){
+            Log.d("Error: ", jerr.toString());
+        }
+        // Creamos el Body con el JSON
+        RequestBody body = RequestBody.create(okhttp3.MediaType.
+                parse("application/json; charset=utf-8"), (jsonObject.toString()));
+        //Realizamos la llamada mediante la API
+        Call<HitsObjectC> call= searchAPI.searchDisp(headerMap, body);
+        call.enqueue(new Callback<HitsObjectC>(){
+            @Override
+            public void onResponse(Call<HitsObjectC> call, Response<HitsObjectC> response) {
+                HitsListC hitsList = new HitsListC();
+                String jsonResponse = "";
+                try{
+                    Log.d(TAG, "onResponse: server response: " + response.toString());
+                    //Si la respuesta es satisfactoria
+                    if(response.isSuccessful()){
+                        Log.d(TAG, "repsonseBody: "+ response.body().toString());
+                        hitsList = response.body().getHits();
+                        Log.d(TAG, " -----------onResponse: la response: "+response.body()
+                                .toString());
+                    }else{
+                        jsonResponse = response.errorBody().string(); //error response body
+                    }
+                    for(int i = 0; i < hitsList.getCazuelaIndex().size(); i++){
+                        Log.d(TAG, "onResponse: data: " + hitsList.getCazuelaIndex().get(i)
+                                .getDispositivo().toString());
+                        mDispositivo.add(hitsList.getCazuelaIndex().get(i).getDispositivo());
+                    }
+                    saveArrayList(mDispositivo, "navprefs");
+
+                }catch (NullPointerException e){
+                    Log.e(TAG, "onResponse: NullPointerException: " + e.getMessage() );
+                }
+                catch (IndexOutOfBoundsException e){
+                    Log.e(TAG, "onResponse: IndexOutOfBoundsException: " + e.getMessage() );
+                }
+                catch (IOException e){
+                    Log.e(TAG, "onResponse: IOException: " + e.getMessage() );
+                }
+            }
+
+            @Override
+            public void onFailure(Call<HitsObjectC> call, Throwable t) {
+
+            }
+
+        });
+    }
+    public void saveArrayList(ArrayList<Dispositivo> list, String key){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.apply();
     }
 }

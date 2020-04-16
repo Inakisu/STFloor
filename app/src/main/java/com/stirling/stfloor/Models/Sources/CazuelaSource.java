@@ -3,17 +3,17 @@ package com.stirling.stfloor.Models.Sources;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.stirling.stfloor.Models.POJOs.Cazuela;
+import com.stirling.stfloor.Models.POJOs.Dispositivo;
 
 @IgnoreExtraProperties
 public class CazuelaSource {
 
     @SerializedName("_source")
     @Expose
-    private Cazuela cazuela;
+    private Dispositivo dispositivo;
 
-    public Cazuela getCazuela(){ return cazuela;}
+    public Dispositivo getDispositivo(){ return dispositivo;}
 
-    public void setCazuela(Cazuela cazuela){ this.cazuela = cazuela;}
+    public void setDispositivo(Dispositivo dispositivo){ this.dispositivo = dispositivo;}
 
 }
