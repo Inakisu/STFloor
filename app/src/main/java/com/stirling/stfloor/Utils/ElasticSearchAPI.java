@@ -1,8 +1,7 @@
 package com.stirling.stfloor.Utils;
 
 import com.stirling.stfloor.Models.HitsObjects.HitsObject;
-import com.stirling.stfloor.Models.HitsObjects.HitsObjectC;
-import com.stirling.stfloor.Models.HitsObjects.HitsObjectM;
+import com.stirling.stfloor.Models.HitsObjects.HitsObjectD;
 import com.stirling.stfloor.Models.POJOs.RespuestaB;
 import com.stirling.stfloor.Models.POJOs.RespuestaU;
 import com.stirling.stfloor.Models.gson2pojo.Example;
@@ -20,8 +19,8 @@ import retrofit2.http.POST;
 public interface ElasticSearchAPI {
 
     //Llamada para buscar dispositivos. Headermap para autenticacion y body para query json
-    @POST("stf_dispositivos/_search")
-    Call<HitsObject> searchDispositivo(@HeaderMap Map<String, String> headers,
+    @POST("/stf_dispositivo/_search")
+    Call<HitsObjectD> searchDispositivo(@HeaderMap Map<String, String> headers,
                                        @Body RequestBody params);
 
     //Llamada para introducir un usuario nuevo dispositivo en la base de datos. //no utiliz.
@@ -36,9 +35,9 @@ public interface ElasticSearchAPI {
                                         @Body RequestBody params);
 
     //Llamada para obtener información sobre una medición
-    @POST("/stf_mediciones/_search")
-    Call<HitsObjectC> searchDisp(@HeaderMap Map<String, String> headers,
-                                    @Body RequestBody params);
+    @POST("/stf_dispositivo/_search")
+    Call<HitsObjectD> searchDisp(@HeaderMap Map<String, String> headers,
+                                 @Body RequestBody params);
 
     //Llamada para introducir una cazuela nueva en la base de datos
     @POST("/cazuelas_sukaldatzen/_doc")

@@ -3,20 +3,20 @@ package com.stirling.stfloor.Models.POJOs;
 public class Dispositivo {
 
     private String idMac;
-    private String nombreCazuela;
-    private String correousu;
-    private boolean dueno;
+    private String nombreHab;
+    private int tConsigna;
+    private int sensibilidad;
 
     public Dispositivo(){
 
     }
 
     public String toString(){
-        return "Cazuela{" +
+        return "Dispositivo{" +
                 "idMac='"+idMac+'\''+
-                ", nombreCazuela='" + nombreCazuela + '\'' +
-                ", correousu='" + correousu + '\''+
-                ", dueno='" + dueno + '\''+       //OJO aquí, que esto es un booleano
+                ", nombreHab='" + nombreHab + '\'' +
+                ", tConsigna='" + tConsigna + '\''+
+                ", sensibilidad='" + sensibilidad + '\''+
                 '}';
     }
 
@@ -28,27 +28,27 @@ public class Dispositivo {
         this.idMac = idMac;
     }
 
-    public String getNombreCazuela() {
-        return nombreCazuela;
+    public String getNombreHab() {
+        return nombreHab;
     }
 
-    public void setNombreCazuela(String nombreCazuela) {
-        this.nombreCazuela = nombreCazuela;
+    public void setNombreHab(String nombreHab) {
+        this.nombreHab = nombreHab;
     }
 
-    public String getCorreousu() {
-        return correousu;
+    public int gettConsigna() {
+        return tConsigna;
     }
 
-    public void setCorreousu(String correousu) {
-        this.correousu = correousu;
+    public void setTConsigna(int tConsigna) {
+        this.tConsigna = tConsigna;
     }
 
-    public boolean isDueno() {
-        return dueno;
+    public int getSensibilidad() {
+        return sensibilidad;
     }
 
-    public void setDueno(boolean dueno) {
-        this.dueno = dueno;
+    public void setSensibilidad(int sensibilidad) {
+        this.sensibilidad = sensibilidad;
     }
 }

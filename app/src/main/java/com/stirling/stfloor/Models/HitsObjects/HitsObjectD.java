@@ -3,16 +3,16 @@ package com.stirling.stfloor.Models.HitsObjects;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.stirling.stfloor.Models.HitsLists.HitsListC;
+import com.stirling.stfloor.Models.HitsLists.HitsListD;
 
 @IgnoreExtraProperties
-public class HitsObjectC {
+public class HitsObjectD {
 
     @SerializedName("hits")
     @Expose
-    private HitsListC hits;
+    private HitsListD hits;
 
-    public HitsListC getHits(){ return hits;}
+    public HitsListD getHits(){ return hits;}
 
-    public void setHits(HitsListC hits){ this.hits = hits;}
+    public void setHits(HitsListD hits){ this.hits = hits;}
 }

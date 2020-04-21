@@ -5,10 +5,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.stirling.stfloor.Models.HitsLists.HitsList;
 
-/**
- * Created by User on 10/31/2017.
- */
-
 @IgnoreExtraProperties
 public class HitsObject {
 

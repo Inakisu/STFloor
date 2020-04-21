@@ -46,7 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stirling.stfloor.Models.BluetoothLE;
-import com.stirling.stfloor.Models.HitsLists.HitsListC;
+import com.stirling.stfloor.Models.HitsLists.HitsListD;
 import com.stirling.stfloor.Models.POJOs.RespuestaB;
 import com.stirling.stfloor.Models.POJOs.RespuestaU;
 import com.stirling.stfloor.Utils.BleCallback;
@@ -608,7 +608,7 @@ public class BluetoothActivity extends AppCompatActivity {
         call.enqueue(new Callback<RespuestaB>() {
             @Override
             public void onResponse(Call<RespuestaB> call, Response<RespuestaB> response) {
-                HitsListC hitsList = new HitsListC();
+                HitsListD hitsList = new HitsListD();
                 String jsonResponse = "";
                 try{
                     Log.d(TAG, "onResponse borrar cazuela: server response: "

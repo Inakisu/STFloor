@@ -15,12 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.gson.Gson;
 import com.stirling.stfloor.BluetoothActivity;
-import com.stirling.stfloor.Models.HitsLists.HitsListC;
-import com.stirling.stfloor.Models.HitsObjects.HitsObjectC;
+import com.stirling.stfloor.Models.HitsLists.HitsListD;
+import com.stirling.stfloor.Models.HitsObjects.HitsObjectD;
 import com.stirling.stfloor.Models.POJOs.Dispositivo;
 import com.stirling.stfloor.Models.gson2pojo.Aggregations;
 import com.stirling.stfloor.Models.gson2pojo.Example;
@@ -84,15 +85,15 @@ public class DashboardFragment extends Fragment {
         actualizarListaDispositivos();
 
         //Extraemos de la lista de dispositivos los nombres de éstos y los introducimos en una lista
-        for(int i = 0; i<mDispositivo.size(); i++){
-            String nombreDisp = mDispositivo.get(i).getNombreCazuela(); //todo
-        }
+        /*for(int i = 0; i<mDispositivo.size(); i++){
+            String nombreDisp = mDispositivo.get(i).getNombreHab(); //todo
+        }*/
         //Introducimos datos de la lista obtenida en el spinner
         spinnerAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,
                 nombreDisps);
 
         //Proceso para actualizar información cada segundo
-        final Handler handler = new Handler();
+        /*final Handler handler = new Handler();
         new Runnable(){
             @Override
             public void run(){
@@ -100,7 +101,7 @@ public class DashboardFragment extends Fragment {
                     actualizarValores(macDispositivo);
                 }
             }
-        };
+        };*/
 
         btnPrueba = (FloatingActionButton) view.findViewById(R.id.botonPrueba);
         btnAnadirDispositivo = (FloatingActionButton) view.findViewById(R.id.anadirDispFloatingButton);
@@ -228,29 +229,15 @@ public class DashboardFragment extends Fragment {
                 mElasticSearchPassword));
         try{
             queryJson = "{\n" +
-                    "  \"query\": {\n" +
-                    "    \"bool\": {\n" +
-                    "      \"must\": [\n" +
-                    "        {\"match_all\": {\n" +
-                    "          \n" +
-                    "        }}\n" +
-                    "      ]\n" +
-                    "    }\n" +
-                    "  },\n" +
-                    "  \"aggs\": {\n" +
-                    "    \"myAgg\": {\n" +
-                    "      \"top_hits\": {\n" +
-                    "        \"size\": 99,\n" +
-                    "        \"sort\": [\n" +
-                    "          {\n" +
-                    "            \"timestamp\":{\n" +
-                    "              \"order\": \"desc\"\n" +
-                    "            }\n" +
-                    "          }]\n" +
-                    "      }\n" +
-                    "    }\n" +
-                    "  }\n" +
-                    "}";
+                        "  \"query\": {\n" +
+                        "    \"bool\": {\n" +
+                        "      \"must\": [\n" +
+                        "        {\"match_all\": {\n" +
+                        "        }}\n" +
+                        "      ]\n" +
+                        "    }\n" +
+                        "  }" +
+                        "}";
             jsonObject = new JSONObject(queryJson);
         }catch (JSONException jerr){
             Log.d("Error: ", jerr.toString());
@@ -259,27 +246,29 @@ public class DashboardFragment extends Fragment {
         RequestBody body = RequestBody.create(okhttp3.MediaType.
                 parse("application/json; charset=utf-8"), (jsonObject.toString()));
         //Realizamos la llamada mediante la API
-        Call<HitsObjectC> call= searchAPI.searchDisp(headerMap, body);
-        call.enqueue(new Callback<HitsObjectC>(){
+        Call<HitsObjectD> call= searchAPI.searchDispositivo(headerMap, body);
+        call.enqueue(new Callback<HitsObjectD>() {
             @Override
-            public void onResponse(Call<HitsObjectC> call, Response<HitsObjectC> response) {
-                HitsListC hitsList = new HitsListC();
+            public void onResponse(Call<HitsObjectD> call, Response<HitsObjectD> response) {
+                Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();//prueba
+                HitsListD hitsListD = new HitsListD();
                 String jsonResponse = "";
                 try{
                     Log.d(TAG, "onResponse: server response: " + response.toString());
                     //Si la respuesta es satisfactoria
                     if(response.isSuccessful()){
                         Log.d(TAG, "repsonseBody: "+ response.body().toString());
-                        hitsList = response.body().getHits();
+                        hitsListD = response.body().getHits();
                         Log.d(TAG, " -----------onResponse: la response: "+response.body()
                                 .toString());
                     }else{
                         jsonResponse = response.errorBody().string(); //error response body
+                        Log.e("ErrES:", jsonResponse);
                     }
-                    for(int i = 0; i < hitsList.getCazuelaIndex().size(); i++){
-                        Log.d(TAG, "onResponse: data: " + hitsList.getCazuelaIndex().get(i)
+                    for(int i = 0; i < hitsListD.getDispositivoIndex().size(); i++){
+                        Log.d(TAG, "onResponse: data: " + hitsListD.getDispositivoIndex().get(i)
                                 .getDispositivo().toString());
-                        mDispositivo.add(hitsList.getCazuelaIndex().get(i).getDispositivo());
+                        mDispositivo.add(hitsListD.getDispositivoIndex().get(i).getDispositivo());
                     }
                     saveArrayList(mDispositivo, "navprefs");
 
@@ -295,8 +284,9 @@ public class DashboardFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<HitsObjectC> call, Throwable t) {
-
+            public void onFailure(Call<HitsObjectD> call, Throwable t) {
+                Toast.makeText(getContext(), "Failure", Toast.LENGTH_SHORT).show();//prueba
+                Log.e("onFailure: ", t.toString());
             }
 
         });

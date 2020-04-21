@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import com.stirling.stfloor.Models.POJOs.Dispositivo;
 
 @IgnoreExtraProperties
-public class CazuelaSource {
+public class DispositivoSource {
 
     @SerializedName("_source")
     @Expose
