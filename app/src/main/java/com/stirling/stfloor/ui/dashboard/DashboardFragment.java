@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,10 +57,12 @@ public class DashboardFragment extends Fragment {
     private String macDispositivo;
     private String mElasticSearchPassword = Constants.elasticPassword;
     private String queryJson = "";
-    public  boolean detener;
+    public  boolean detener = false;
     private JSONObject jsonObject;
     private FloatingActionButton btnAnadirDispositivo;
     private FloatingActionButton btnPrueba;
+    private Spinner spinnerDispositivos;
+    private boolean primeraVez = true;
 
     private ArrayAdapter<String> spinnerAdapter;
     private ArrayList<Dispositivo> mDispositivo; // Lista donde se almacenarán las respuestas de la query de las cazuelas
@@ -80,28 +83,21 @@ public class DashboardFragment extends Fragment {
         inicializarAPI();
 
         //Inicializamos variables
+        mDispositivo = new ArrayList<Dispositivo>(); //Lista de dispositivos que hay en la BD
+        spinnerDispositivos = (Spinner) view.findViewById(R.id.spinnerDispDash);
 
-        //Obtenemos la lista de dispositivos y la guardamos en SharedPreferences
-        actualizarListaDispositivos();
+//        Log.e("ACT", "===================1111111111===============");
 
-        //Extraemos de la lista de dispositivos los nombres de éstos y los introducimos en una lista
-        /*for(int i = 0; i<mDispositivo.size(); i++){
-            String nombreDisp = mDispositivo.get(i).getNombreHab(); //todo
-        }*/
-        //Introducimos datos de la lista obtenida en el spinner
-        spinnerAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,
-                nombreDisps);
-
-        //Proceso para actualizar información cada segundo
-        /*final Handler handler = new Handler();
+        //Proceso para actualizar información cada segundo en segundo plano
+        final Handler handler = new Handler();
         new Runnable(){
             @Override
             public void run(){
                 if(!detener){
-                    actualizarValores(macDispositivo);
+                    //actualizarValores(macDispositivo);
                 }
             }
-        };*/
+        };
 
         btnPrueba = (FloatingActionButton) view.findViewById(R.id.botonPrueba);
         btnAnadirDispositivo = (FloatingActionButton) view.findViewById(R.id.anadirDispFloatingButton);
@@ -123,6 +119,25 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+//        detener = true;
+//        mCazuela.clear();
+        primeraVez = true;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//        ft.detach(this).attach(this).commit();
+        if(primeraVez){ //para que al añadir un nuevo dispositivo desde otra activity se actualice
+//            Log.e("ACT", "===================22222222222222===============");
+            actualizarListaDispositivos();
+        }
+        detener = false;
     }
 
     private void inicializarAPI(){
@@ -271,6 +286,17 @@ public class DashboardFragment extends Fragment {
                         mDispositivo.add(hitsListD.getDispositivoIndex().get(i).getDispositivo());
                     }
                     saveArrayList(mDispositivo, "navprefs");
+
+                    //Extraemos de la lista de dispositivos los nombres de éstos y los introducimos en una lista
+                    nombreDisps = new ArrayList<String>();
+                    for(int i = 0; i<mDispositivo.size(); i++){
+                        nombreDisps.add(mDispositivo.get(i).getNombreHab()); //todo
+                    }
+                    //Introducimos datos de la lista obtenida en el spinner
+                    spinnerAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,
+                            nombreDisps);
+                    //Asignamos al spinner el adapter
+                    spinnerDispositivos.setAdapter(spinnerAdapter);
 
                 }catch (NullPointerException e){
                     Log.e(TAG, "onResponse: NullPointerException: " + e.getMessage() );
