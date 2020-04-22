@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.stirling.stfloor.BluetoothActivity;
+import com.stirling.stfloor.MainActivity;
 import com.stirling.stfloor.Models.HitsLists.HitsListD;
 import com.stirling.stfloor.Models.HitsObjects.HitsObjectD;
 import com.stirling.stfloor.Models.POJOs.Dispositivo;
@@ -86,7 +87,7 @@ public class DashboardFragment extends Fragment {
         mDispositivo = new ArrayList<Dispositivo>(); //Lista de dispositivos que hay en la BD
         spinnerDispositivos = (Spinner) view.findViewById(R.id.spinnerDispDash);
 
-//        Log.e("ACT", "===================1111111111===============");
+        //Obtener lista de dispositivos desde sharedPreferences
 
         //Proceso para actualizar información cada segundo en segundo plano
         final Handler handler = new Handler();
@@ -146,6 +147,24 @@ public class DashboardFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         searchAPI = retrofit.create(ElasticSearchAPI.class);
+    }
+
+    /**
+     * Ejecuta el método de MainActivity que solicita la lista de dispositivos a la base de datos
+     */
+    private void actualizarLista(){
+        ((MainActivity) getActivity()).obtenerDispositivos();
+    }
+
+    /**
+     * Método que obtiene la lista de dispositivos desde SharedPreferences
+     */
+    private void obtenerDispsSharedPrefs(){ //Estoy hay que probarlo muy fuerte en el debugger
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String listaJson = prefs.getString("navprefs", null);
+        Gson gson = new Gson();
+        HitsListD hitsListD = gson.fromJson(listaJson, HitsListD.class); //No pué ser HitsListD
+
     }
 
     private void actualizarValores(String mac){
