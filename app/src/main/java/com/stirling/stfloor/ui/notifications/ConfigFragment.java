@@ -1,6 +1,8 @@
 package com.stirling.stfloor.ui.notifications;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 
+import com.google.gson.Gson;
+import com.stirling.stfloor.Models.POJOs.Dispositivo;
 import com.stirling.stfloor.R;
 import com.stirling.stfloor.Utils.Constants;
 import com.stirling.stfloor.Utils.ElasticSearchAPI;
@@ -42,6 +46,7 @@ public class ConfigFragment extends Fragment {
     public  boolean detener = false;
     private JSONObject jsonObject;
     private Spinner spinnerDispConfiguracion;
+    private Dispositivo[] dispositivo;
 
 
     private Button botonGuardar;
@@ -70,6 +75,9 @@ public class ConfigFragment extends Fragment {
         botonGuardar = (Button) view.findViewById(R.id.botonGuardar);
         spinnerDispConfiguracion = (Spinner) view.findViewById(R.id.spinnerDispConf);
 
+        //Obtenemos los dispositivos almacenados en SharedPreferences
+        obtenerDesdeSharedPrefs();
+
         /*spinnerDispConfiguracion.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -82,7 +90,7 @@ public class ConfigFragment extends Fragment {
     /**
      * Este método recoge los parámetros de configuración establecidos y los envía
      */
-    public void enviarConfiguracion(){
+    /*public void enviarConfiguracion(){
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", Credentials.basic("android",
                 mElasticSearchPassword));
@@ -136,6 +144,17 @@ public class ConfigFragment extends Fragment {
 
             }
         });
+    }*/
+
+    private void obtenerDesdeSharedPrefs(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String jsonString = prefs.getString("navprefs", null);
+        Gson gson = new Gson();
+        //A un array
+        dispositivo = gson.fromJson( jsonString, Dispositivo[].class );
+        System.out.println("Obt SPrefs Conf: " + gson.toJson( dispositivo ) );
+        String no = dispositivo[1].getNombreHab();
+
     }
 
     private void inicializarAPI(){

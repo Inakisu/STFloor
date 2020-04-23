@@ -40,6 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.ContentValues.TAG;
 
@@ -71,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        //Inicializamos la API de Elasticsearch
+        inicializarAPI();
 
         //Inicializamos variables
         mDispositivo = new ArrayList<Dispositivo>(); //Lista de dispositivos que hay en la BD
@@ -166,6 +170,17 @@ public class MainActivity extends AppCompatActivity {
         String json = gson.toJson(list);
         editor.putString(key, json);
         editor.apply();
+    }
+
+    /**
+     * Se inicializa la API de Elasticsearch en la URL especificada
+     */
+    private void inicializarAPI(){
+        retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.URL_ELASTICSEARCH)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        searchAPI = retrofit.create(ElasticSearchAPI.class);
     }
 
 }

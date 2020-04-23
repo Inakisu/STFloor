@@ -257,7 +257,7 @@ public class DashboardFragment extends Fragment {
 
     }
     private void actualizarListaDispositivos(){
-        //Generamos un authentication header para identificarnos contra Elasticsearch
+        /*//Generamos un authentication header para identificarnos contra Elasticsearch
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", Credentials.basic("android",
                 mElasticSearchPassword));
@@ -310,14 +310,14 @@ public class DashboardFragment extends Fragment {
                     nombreDisps = new ArrayList<String>();
                     for(int i = 0; i<mDispositivo.size(); i++){
                         nombreDisps.add(mDispositivo.get(i).getNombreHab()); //todo
-                    }
+                    }*/
                     //Introducimos datos de la lista obtenida en el spinner
                     spinnerAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,
                             nombreDisps);
                     //Asignamos al spinner el adapter
                     spinnerDispositivos.setAdapter(spinnerAdapter);
 
-                }catch (NullPointerException e){
+                /*}catch (NullPointerException e){
                     Log.e(TAG, "onResponse: NullPointerException: " + e.getMessage() );
                 }
                 catch (IndexOutOfBoundsException e){
@@ -334,7 +334,7 @@ public class DashboardFragment extends Fragment {
                 Log.e("onFailure: ", t.toString());
             }
 
-        });
+        });*/
     }
     public void saveArrayList(ArrayList<Dispositivo> list, String key){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
