@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
@@ -24,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.Credentials;
@@ -45,8 +48,10 @@ public class ConfigFragment extends Fragment {
     private String queryJson = "";
     public  boolean detener = false;
     private JSONObject jsonObject;
+    private ArrayAdapter<String> spinnerAdapter;
     private Spinner spinnerDispConfiguracion;
     private Dispositivo[] dispositivo;
+    private ArrayList<String> nombreDisps;
 
 
     private Button botonGuardar;
@@ -73,18 +78,30 @@ public class ConfigFragment extends Fragment {
 
         //Inicializamos variables
         botonGuardar = (Button) view.findViewById(R.id.botonGuardar);
+        nombreDisps = new ArrayList<>();
         spinnerDispConfiguracion = (Spinner) view.findViewById(R.id.spinnerDispConf);
 
         //Obtenemos los dispositivos almacenados en SharedPreferences
         obtenerDesdeSharedPrefs();
 
-        /*spinnerDispConfiguracion.setOnClickListener( new View.OnClickListener(){
+        spinnerDispConfiguracion.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener(){
+
             @Override
-            public void onClick(View v){
-                //Obtenemos la dirección MAC del dispositivo que ha seleccionado
-                //en el spinner
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Se obtiene la posición del elemento seleccionado en el spinner
+                int pos = spinnerDispConfiguracion.getSelectedItemPosition();
+                //Obtenemos la dirección MAC del dispositivo correspondiente a esa posición
+                //en el arrayList de dispositivos obtenidos.
+                macDispositivo = dispositivo[pos].getIdMac();
+                Log.d("Conf: ", "Dir. MAC del disp. selecc.: " + macDispositivo);
             }
-        });*/
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
     }
 
     /**
@@ -155,9 +172,14 @@ public class ConfigFragment extends Fragment {
         System.out.println("Obt SPrefs Conf: " + gson.toJson( dispositivo ) );
         for(int j = 0; j<dispositivo.length; j++){
             String no = dispositivo[j].getNombreHab();
+            nombreDisps.add(no);
             System.out.println("Nombre hab prueba: " + no);
         }
-
+        //Introducimos los nombres al spinner
+        spinnerAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,
+                nombreDisps);
+        //Asignamos al spinner el adapter
+        spinnerDispConfiguracion.setAdapter(spinnerAdapter);
     }
 
     private void inicializarAPI(){

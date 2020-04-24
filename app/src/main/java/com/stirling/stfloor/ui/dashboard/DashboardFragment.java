@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -91,6 +92,25 @@ public class DashboardFragment extends Fragment {
 
         //Obtener lista de dispositivos desde sharedPreferences
 
+        spinnerDispositivos.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener(){
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Se obtiene la posición del elemento seleccionado en el spinner
+                int pos = spinnerDispositivos.getSelectedItemPosition();
+                //Obtenemos la dirección MAC del dispositivo correspondiente a esa posición
+                //en el arrayList de dispositivos obtenidos.
+                macDispositivo = dispositivo[pos].getIdMac();
+                Log.d("Dash: ", "Dir. MAC del disp. selecc.: " + macDispositivo);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
         //Proceso para actualizar información cada segundo en segundo plano
         final Handler handler = new Handler();
         new Runnable(){
@@ -104,8 +124,8 @@ public class DashboardFragment extends Fragment {
 
         btnPrueba = (FloatingActionButton) view.findViewById(R.id.botonPrueba);
         btnAnadirDispositivo = (FloatingActionButton) view.findViewById(R.id.anadirDispFloatingButton);
-        //listener para el botón Añadir Dispositivo, nueva activity
 
+        //listener para el botón Añadir Dispositivo, nueva activity
         btnAnadirDispositivo.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -174,6 +194,11 @@ public class DashboardFragment extends Fragment {
             nombreDisps.add(no);
             System.out.println("Nombre hab prueba: " + no);
         }
+        //Introducimos datos de la lista obtenida en el spinner
+        spinnerAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,
+                nombreDisps);
+        //Asignamos al spinner el adapter
+        spinnerDispositivos.setAdapter(spinnerAdapter);
     }
 
     private void actualizarValores(String mac){
