@@ -20,6 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.HeatDataEntry;
+import com.anychart.charts.HeatMap;
+import com.anychart.enums.SelectionMode;
+import com.anychart.graphics.vector.SolidFill;
 import com.google.gson.Gson;
 import com.stirling.stfloor.BluetoothActivity;
 import com.stirling.stfloor.MainActivity;
@@ -41,6 +48,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.Credentials;
 import okhttp3.RequestBody;
@@ -91,6 +99,81 @@ public class DashboardFragment extends Fragment {
         spinnerDispositivos = (Spinner) view.findViewById(R.id.spinnerDispDash);
 
         //Obtener lista de dispositivos desde sharedPreferences
+
+        //Inicializamos anychartview
+        AnyChartView anyChartView = view.findViewById(R.id.any_chart_view);
+        //anyChartView.setProgressBar(view.findViewById());
+        HeatMap tempMap = AnyChart.heatMap();
+        tempMap.stroke("1 #fff");
+        tempMap.hovered()
+                .stroke("6 #fff")
+                .fill(new SolidFill("#545f69", 1d))
+                .labels("{ fontColor: '#fff' }");
+
+        tempMap.interactivity().selectionMode(SelectionMode.NONE);
+
+        tempMap.title().enabled(true);
+        tempMap.title()
+                .text("Risk Matrix in Project Server")
+                .padding(0d, 0d, 20d, 0d);
+
+        tempMap.labels().enabled(true);
+        tempMap.labels()
+                .minFontSize(14d)
+                .format("function() {\n" +
+                        "      var namesList = [\"Low\", \"Medium\", \"High\", \"Extreme\"];\n" +
+                        "      return namesList[this.heat];\n" +
+                        "    }");
+
+        tempMap.yAxis(0).stroke(null);
+        tempMap.yAxis(0).labels().padding(0d, 15d, 0d, 0d);
+        tempMap.yAxis(0).ticks(false);
+        tempMap.xAxis(0).stroke(null);
+        tempMap.xAxis(0).ticks(false);
+
+        tempMap.tooltip().title().useHtml(true);
+        tempMap.tooltip()
+                .useHtml(true)
+                .titleFormat("function() {\n" +
+                        "      var namesList = [\"Low\", \"Medium\", \"High\", \"Extreme\"];\n" +
+                        "      return '<b>' + namesList[this.heat] + '</b> Residual Risk';\n" +
+                        "    }")
+                .format("function () {\n" +
+                        "       return '<span style=\"color: #CECECE\">Likelihood: </span>' + this.x + '<br/>' +\n" +
+                        "           '<span style=\"color: #CECECE\">Consequence: </span>' + this.y;\n" +
+                        "   }");
+
+        List<DataEntry> data = new ArrayList<>();
+        data.add(new CustomHeatDataEntry("Rare", "Insignificant", 0, "#90caf9"));
+        data.add(new CustomHeatDataEntry("Rare", "Minor", 0, "#90caf9"));
+        data.add(new CustomHeatDataEntry("Rare", "Moderate", 0, "#90caf9"));
+        data.add(new CustomHeatDataEntry("Rare", "Major", 0, "#90caf9"));
+        data.add(new CustomHeatDataEntry("Rare", "Extreme", 0, "#90caf9"));
+        data.add(new CustomHeatDataEntry("Unlikely", "Insignificant", 0, "#90caf9"));
+        data.add(new CustomHeatDataEntry("Unlikely", "Minor", 0, "#90caf9"));
+        data.add(new CustomHeatDataEntry("Unlikely", "Moderate", 0, "#90caf9"));
+        data.add(new CustomHeatDataEntry("Unlikely", "Major", 1, "#ffb74d"));
+        data.add(new CustomHeatDataEntry("Unlikely", "Extreme", 1, "#ffb74d"));
+        data.add(new CustomHeatDataEntry("Possible", "Insignificant", 0, "#90caf9"));
+        data.add(new CustomHeatDataEntry("Possible", "Minor", 0, "#90caf9"));
+        data.add(new CustomHeatDataEntry("Possible", "Moderate", 1, "#ffb74d"));
+        data.add(new CustomHeatDataEntry("Possible", "Major", 1, "#ffb74d"));
+        data.add(new CustomHeatDataEntry("Possible", "Extreme", 1, "#ffb74d"));
+        data.add(new CustomHeatDataEntry("Likely", "Insignificant", 0, "#90caf9"));
+        data.add(new CustomHeatDataEntry("Likely", "Minor", 1, "#ffb74d"));
+        data.add(new CustomHeatDataEntry("Likely", "Moderate", 1, "#ffb74d"));
+        data.add(new CustomHeatDataEntry("Likely", "Major", 2, "#ef6c00"));
+        data.add(new CustomHeatDataEntry("Likely", "Extreme", 2, "#ef6c00"));
+        data.add(new CustomHeatDataEntry("Almost\\nCertain", "Insignificant", 0, "#90caf9"));
+        data.add(new CustomHeatDataEntry("Almost\\nCertain", "Minor", 1, "#ffb74d"));
+        data.add(new CustomHeatDataEntry("Almost\\nCertain", "Moderate", 1, "#ffb74d"));
+        data.add(new CustomHeatDataEntry("Almost\\nCertain", "Major", 2, "#ef6c00"));
+        data.add(new CustomHeatDataEntry("Almost\\nCertain", "Extreme", 3, "#d84315"));
+
+        tempMap.data(data);
+
+
+        anyChartView.setChart(tempMap);
 
         spinnerDispositivos.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener(){
 
@@ -162,6 +245,16 @@ public class DashboardFragment extends Fragment {
             actualizarListaDispositivos();
         }
         detener = false;
+    }
+
+    /**
+     * Método para entrada datos al heatmap de AnyChart
+     */
+    private class CustomHeatDataEntry extends HeatDataEntry {
+        CustomHeatDataEntry(String x, String y, Integer heat, String fill) {
+            super(x, y, heat);
+            setValue("fill", fill);
+        }
     }
 
     private void inicializarAPI(){
