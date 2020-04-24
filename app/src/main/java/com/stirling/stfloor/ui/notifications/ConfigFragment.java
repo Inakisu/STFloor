@@ -153,7 +153,10 @@ public class ConfigFragment extends Fragment {
         //A un array
         dispositivo = gson.fromJson( jsonString, Dispositivo[].class );
         System.out.println("Obt SPrefs Conf: " + gson.toJson( dispositivo ) );
-        String no = dispositivo[1].getNombreHab();
+        for(int j = 0; j<dispositivo.length; j++){
+            String no = dispositivo[j].getNombreHab();
+            System.out.println("Nombre hab prueba: " + no);
+        }
 
     }
 

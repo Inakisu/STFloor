@@ -64,6 +64,7 @@ public class DashboardFragment extends Fragment {
     private FloatingActionButton btnPrueba;
     private Spinner spinnerDispositivos;
     private boolean primeraVez = true;
+    private Dispositivo[] dispositivo;
 
     private ArrayAdapter<String> spinnerAdapter;
     private ArrayList<Dispositivo> mDispositivo; // Lista donde se almacenarán las respuestas de la query de las cazuelas
@@ -85,6 +86,7 @@ public class DashboardFragment extends Fragment {
 
         //Inicializamos variables
         mDispositivo = new ArrayList<Dispositivo>(); //Lista de dispositivos que hay en la BD
+        nombreDisps = new ArrayList<>();
         spinnerDispositivos = (Spinner) view.findViewById(R.id.spinnerDispDash);
 
         //Obtener lista de dispositivos desde sharedPreferences
@@ -136,6 +138,7 @@ public class DashboardFragment extends Fragment {
 //        ft.detach(this).attach(this).commit();
         if(primeraVez){ //para que al añadir un nuevo dispositivo desde otra activity se actualice
 //            Log.e("ACT", "===================22222222222222===============");
+            obtenerDispsSharedPrefs();
             actualizarListaDispositivos();
         }
         detener = false;
@@ -161,10 +164,16 @@ public class DashboardFragment extends Fragment {
      */
     private void obtenerDispsSharedPrefs(){ //Estoy hay que probarlo muy fuerte en el debugger
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String listaJson = prefs.getString("navprefs", null);
+        String jsonString = prefs.getString("navprefs", null);
         Gson gson = new Gson();
-        HitsListD hitsListD = gson.fromJson(listaJson, HitsListD.class); //No pué ser HitsListD
-
+        //A un array
+        dispositivo = gson.fromJson( jsonString, Dispositivo[].class );
+        System.out.println("Obt SPrefs Conf: " + gson.toJson( dispositivo ) );
+        for(int j = 0; j<dispositivo.length; j++){
+            String no = dispositivo[j].getNombreHab();
+            nombreDisps.add(no);
+            System.out.println("Nombre hab prueba: " + no);
+        }
     }
 
     private void actualizarValores(String mac){
