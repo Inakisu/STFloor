@@ -42,10 +42,12 @@
     <Spinner
         android:id="@+id/spinnerDispDash"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:backgroundTint="#858585"
+        android:foregroundTint="#FFFFFF"
         app:layout_constraintEnd_toStartOf="@+id/botonPrueba"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_dashboard" />
@@ -54,7 +56,7 @@
         android:id="@+id/botonPrueba"
         android:layout_width="34dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:clickable="true"
         app:backgroundTint="#E13078CF"
         app:layout_constraintBottom_toBottomOf="@+id/spinnerDispDash"

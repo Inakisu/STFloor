@@ -27,6 +27,8 @@ import com.anychart.chart.common.dataentry.HeatDataEntry;
 import com.anychart.charts.HeatMap;
 import com.anychart.enums.SelectionMode;
 import com.anychart.graphics.vector.SolidFill;
+import com.anychart.palettes.RangeColors;
+import com.anychart.scales.LinearColor;
 import com.google.gson.Gson;
 import com.stirling.stfloor.BluetoothActivity;
 import com.stirling.stfloor.MainActivity;
@@ -144,7 +146,7 @@ public class DashboardFragment extends Fragment {
                         "   }");
 
         List<DataEntry> data = new ArrayList<>();
-        data.add(new CustomHeatDataEntry("Rare", "Insignificant", 0, "#90caf9"));
+       /* data.add(new CustomHeatDataEntry("Rare", "Insignificant", 0, "#90caf9"));
         data.add(new CustomHeatDataEntry("Rare", "Minor", 0, "#90caf9"));
         data.add(new CustomHeatDataEntry("Rare", "Moderate", 0, "#90caf9"));
         data.add(new CustomHeatDataEntry("Rare", "Major", 0, "#90caf9"));
@@ -168,10 +170,30 @@ public class DashboardFragment extends Fragment {
         data.add(new CustomHeatDataEntry("Almost\\nCertain", "Minor", 1, "#ffb74d"));
         data.add(new CustomHeatDataEntry("Almost\\nCertain", "Moderate", 1, "#ffb74d"));
         data.add(new CustomHeatDataEntry("Almost\\nCertain", "Major", 2, "#ef6c00"));
-        data.add(new CustomHeatDataEntry("Almost\\nCertain", "Extreme", 3, "#d84315"));
+        data.add(new CustomHeatDataEntry("Almost\\nCertain", "Extreme", 3, "#d84315"));*/
 
+//        data.add(new CustomHeatDataEntry("1", "1", 20, "#90caf9"));
+//        data.add(new CustomHeatDataEntry("1", "2", 21 ,"#90caf9"));
+//        data.add(new CustomHeatDataEntry("2", "1", 19,"#ffb74d"));
+//        data.add(new CustomHeatDataEntry("2", "2", 22 ,"#90caf9"));
+
+        data.add(new CustomHeatDataEntry("1", "1", 30));
+        data.add(new CustomHeatDataEntry("1", "2", 21));
+        data.add(new CustomHeatDataEntry("2", "1", 19));
+        data.add(new CustomHeatDataEntry("2", "2", 22));
+        data.add(new CustomHeatDataEntry("3", "1", 25));
+        data.add(new CustomHeatDataEntry("3", "2", 29));
+
+        LinearColor colorTemps = LinearColor.instantiate();
+        String[] colores = new String[2];
+        colores[0] = "#00ccff";
+        colores[1] = "#ffcc00";
+        colorTemps.colors(colores);
+
+        //asignamos los datos a la tabla
         tempMap.data(data);
-
+        //asignamos la escala de color lineal a la tabla
+        tempMap.colorScale(String.valueOf(colorTemps));
 
         anyChartView.setChart(tempMap);
 
@@ -251,9 +273,9 @@ public class DashboardFragment extends Fragment {
      * Método para entrada datos al heatmap de AnyChart
      */
     private class CustomHeatDataEntry extends HeatDataEntry {
-        CustomHeatDataEntry(String x, String y, Integer heat, String fill) {
+        CustomHeatDataEntry(String x, String y, Integer heat){//, String fill) {
             super(x, y, heat);
-            setValue("fill", fill);
+            //setValue("fill", fill);
         }
     }
 
