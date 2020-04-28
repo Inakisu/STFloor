@@ -1,10 +1,12 @@
 package com.stirling.stfloor.ui.notifications;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.Spinner;
 
 
 import com.google.gson.Gson;
+import com.stirling.stfloor.BluetoothActivity;
 import com.stirling.stfloor.Models.POJOs.Dispositivo;
 import com.stirling.stfloor.R;
 import com.stirling.stfloor.Utils.Constants;
@@ -52,6 +55,7 @@ public class ConfigFragment extends Fragment {
     private Spinner spinnerDispConfiguracion;
     private Dispositivo[] dispositivo;
     private ArrayList<String> nombreDisps;
+    private FloatingActionButton btnAnadir;
 
 
     private Button botonGuardar;
@@ -78,6 +82,7 @@ public class ConfigFragment extends Fragment {
 
         //Inicializamos variables
         botonGuardar = (Button) view.findViewById(R.id.botonGuardar);
+        btnAnadir = (FloatingActionButton) view.findViewById(R.id.anadirDispFloatingButton);
         nombreDisps = new ArrayList<>();
         spinnerDispConfiguracion = (Spinner) view.findViewById(R.id.spinnerDispConf);
 
@@ -100,6 +105,15 @@ public class ConfigFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
 
+            }
+        });
+
+        btnAnadir.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //Abrimos activity de búsqueda de dispositivos BLE para sincronización
+                Intent intent = new Intent(getActivity(), BluetoothActivity.class);
+                startActivity(intent);
             }
         });
     }
