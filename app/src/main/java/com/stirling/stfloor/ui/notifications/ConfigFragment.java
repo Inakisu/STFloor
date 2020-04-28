@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.stirling.stfloor.BluetoothActivity;
 import com.stirling.stfloor.Models.POJOs.Dispositivo;
 import com.stirling.stfloor.Models.POJOs.RespuestaB;
+import com.stirling.stfloor.Models.POJOs.RespuestaU;
 import com.stirling.stfloor.R;
 import com.stirling.stfloor.Utils.Constants;
 import com.stirling.stfloor.Utils.ElasticSearchAPI;
@@ -157,7 +158,7 @@ public class ConfigFragment extends Fragment {
                         "    \"bool\":{\n" +
                         "      \"must\": [\n" +
                         "        {\"match\": {\n" +
-                        "          \"idMac\": \"33:33\"\n" +
+                        "          \"idMac\": \"" + mac + "\"\n" +
                         "          }\n" +
                         "        }\n" +
                         "      ]\n" +
@@ -178,27 +179,26 @@ public class ConfigFragment extends Fragment {
             public void onResponse(Call<RespuestaB> call, Response<RespuestaB> response) {
                 String jsonResponse = "";
                 try{
-                    Log.d(TAG, "onResponse addcazuela: server response: " +
-                            response.toString());
+                    Log.d(TAG, "onResponse borrarDispositivo");
                     //Si la respuesta es satisfactoria
                     if(response.isSuccessful()){
-                        Log.d(TAG, "repsonseBody addcazuela: "+ response.body().toString());
-                        Log.d(TAG, " --onResponse addcazuela: la response: "+response.body()
-                                .toString());
+                        Log.d(TAG, "onResponse borrarCazuela: Exitoso! Ole los caracole!: "+
+                                response.body().toString());
                     }else{
                         jsonResponse = response.errorBody().string(); //error response body
+                        Log.d(TAG, "onResponse borrarCazuela: NO successful..: "+
+                                response.body().toString());
                     }
-                    Log.d(TAG, "onResponse add cazuela: ok ");
 
                 }catch (NullPointerException e){
-                    Log.e(TAG, "onResponse addcazuela: NullPointerException: " + e.getMessage() );
+                    Log.e(TAG, "onResponse borrarDispositivo: NullPointerException: " + e.getMessage() );
                 }
                 catch (IndexOutOfBoundsException e){
-                    Log.e(TAG, "onResponse addcazuela: IndexOutOfBoundsException: " +
+                    Log.e(TAG, "onResponse borrarDispositivo: IndexOutOfBoundsException: " +
                             e.getMessage() );
                 }
                 catch (IOException e){
-                    Log.e(TAG, "onResponse addcazuela: IOException: " + e.getMessage() );
+                    Log.e(TAG, "onResponse borrarDispositivo: IOException: " + e.getMessage() );
                 }
             }
 
@@ -211,17 +211,22 @@ public class ConfigFragment extends Fragment {
 
     /**
      * Este método recoge los parámetros de configuración establecidos y los envía
+     *
+     * @param mac dirección MAC del dispositivo a modificar
+     * @param nombreHab Nuevo nombre de habitación
+     * @param tCons nuevo valor de temperatura de consigna deseada
+     * @param Sens nuevo valor de configuración de sensibilidad
      */
-    /*public void enviarConfiguracion(){
+    public void enviarConfiguracion(String mac, String nombreHab, String tCons, String Sens){
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", Credentials.basic("android",
                 mElasticSearchPassword));
         try {
             queryJson = "{\n" +
-                    "  \"idMac\":\""+ macA +"\",\n" +
-                    "  \"nombreHab\":\""+ macA +"\",\n" +
-                    "  \"correousu\":\""+ correo +"\",\n" +
-                    "  \"dueno\":true\n" +
+                    "  \"idMac\":\""+ mac +"\",\n" +
+                    "  \"nombreHab\":\""+ nombreHab +"\",\n" +
+                    "  \"tConsigna\":\""+ tCons +"\",\n" +
+                    "  \"sensibilidad\":"+ Sens + "\n" +
                     "}";
             jsonObject = new JSONObject(queryJson);
         }catch (JSONException jerr){
@@ -231,7 +236,7 @@ public class ConfigFragment extends Fragment {
         RequestBody body = RequestBody.create(okhttp3.MediaType
                 .parse("application/json; charset=utf-8"),(jsonObject.toString()));
         //Realizamos la llamada mediante la API
-        Call<RespuestaU> call = searchAPI.postCazuela(headerMap, body);
+        Call<RespuestaU> call = searchAPI.postDispReg(headerMap, body);
         call.enqueue(new Callback<RespuestaU>() {
             @Override
             public void onResponse(Call<RespuestaU> call, Response<RespuestaU> response) {
@@ -266,7 +271,7 @@ public class ConfigFragment extends Fragment {
 
             }
         });
-    }*/
+    }
 
     /**
      * Se obtiene desde sharedPreferences la lista de dispositivos obtenida en MainActivity
