@@ -31,8 +31,8 @@ public interface ElasticSearchAPI {
     //Prueba: LLamada para eliminar la entrada   de un dispositivo
     //usado a la hora de actualizar la ubicación de un dispositivo
     @POST("/stf_dispositivo/_delete_by_query")
-    Call<RequestBody> deleteDispByQuery(@HeaderMap Map<String, String> headers,
-                                        @Body RequestBody params);
+    Call<RespuestaB> deleteDispByQuery(@HeaderMap Map<String, String> headers,
+                                        @Body RequestBody params); //antes <RequestBody>
 
     //Llamada para obtener información sobre una medición
     @POST("/stf_dispositivo/_search")

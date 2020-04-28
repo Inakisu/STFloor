@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.stirling.stfloor.BluetoothActivity;
 import com.stirling.stfloor.Models.POJOs.Dispositivo;
+import com.stirling.stfloor.Models.POJOs.RespuestaB;
 import com.stirling.stfloor.R;
 import com.stirling.stfloor.Utils.Constants;
 import com.stirling.stfloor.Utils.ElasticSearchAPI;
@@ -55,14 +56,13 @@ public class ConfigFragment extends Fragment {
     public  boolean detener = false;
     private JSONObject jsonObject;
     private ArrayAdapter<String> spinnerAdapter;
-    private Spinner spinnerDispConfiguracion;
     private Dispositivo[] dispositivo;
     private ArrayList<String> nombreDisps;
+
     private FloatingActionButton btnAnadir;
     private TextView textConsigna;
     private TextView textSensibilidad;
-
-
+    private Spinner spinnerDispConfiguracion;
     private Button botonGuardar;
 
 
@@ -129,6 +129,84 @@ public class ConfigFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        botonGuardar.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //recogemos información introducida
+//                String textConsNuevo = textConsigna.getText().toString();
+//                String textSensNuevo = textSensibilidad.getText().toString();
+                //eliminamos la entrada de ese dispositivo
+                borrarDispositivo(macDispositivo);//PRIMERO SÓLO ESTO PARA PROBAR QUE SE ELIMINA
+                //introducimos nueva entrada con los datos actualizados
+
+            }
+        });
+    }
+
+    /**
+     * Este método borrará la entrada del dispositivo especificado en el index stf_dispositivo
+     */
+    public void borrarDispositivo(String mac){
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", Credentials.basic("android",
+                mElasticSearchPassword));
+        try {
+            queryJson = "{\n" +
+                        " \"query\":{ \n" +
+                        "    \"bool\":{\n" +
+                        "      \"must\": [\n" +
+                        "        {\"match\": {\n" +
+                        "          \"idMac\": \"33:33\"\n" +
+                        "          }\n" +
+                        "        }\n" +
+                        "      ]\n" +
+                        "    }\n" +
+                        "  }\n" +
+                        "}";
+            jsonObject = new JSONObject(queryJson);
+        }catch (JSONException jerr){
+            Log.d("Error: ", jerr.toString());
+        }
+        //Creamos el body con el JSON
+        RequestBody body = RequestBody.create(okhttp3.MediaType
+                .parse("application/json; charset=utf-8"),(jsonObject.toString()));
+        //Realizamos la llamada mediante la API
+        Call<RespuestaB> call = searchAPI.deleteDispByQuery(headerMap, body);
+        call.enqueue(new Callback<RespuestaB>() {
+            @Override
+            public void onResponse(Call<RespuestaB> call, Response<RespuestaB> response) {
+                String jsonResponse = "";
+                try{
+                    Log.d(TAG, "onResponse addcazuela: server response: " +
+                            response.toString());
+                    //Si la respuesta es satisfactoria
+                    if(response.isSuccessful()){
+                        Log.d(TAG, "repsonseBody addcazuela: "+ response.body().toString());
+                        Log.d(TAG, " --onResponse addcazuela: la response: "+response.body()
+                                .toString());
+                    }else{
+                        jsonResponse = response.errorBody().string(); //error response body
+                    }
+                    Log.d(TAG, "onResponse add cazuela: ok ");
+
+                }catch (NullPointerException e){
+                    Log.e(TAG, "onResponse addcazuela: NullPointerException: " + e.getMessage() );
+                }
+                catch (IndexOutOfBoundsException e){
+                    Log.e(TAG, "onResponse addcazuela: IndexOutOfBoundsException: " +
+                            e.getMessage() );
+                }
+                catch (IOException e){
+                    Log.e(TAG, "onResponse addcazuela: IOException: " + e.getMessage() );
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespuestaB> call, Throwable t) {
+
+            }
+        });
     }
 
     /**
@@ -190,6 +268,9 @@ public class ConfigFragment extends Fragment {
         });
     }*/
 
+    /**
+     * Se obtiene desde sharedPreferences la lista de dispositivos obtenida en MainActivity
+     */
     private void obtenerDesdeSharedPrefs(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String jsonString = prefs.getString("navprefs", null);
@@ -209,6 +290,9 @@ public class ConfigFragment extends Fragment {
         spinnerDispConfiguracion.setAdapter(spinnerAdapter);
     }
 
+    /**
+     * Inicialización retrofit y API de Elasticsearch
+     */
     private void inicializarAPI(){
         retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.URL_ELASTICSEARCH)
