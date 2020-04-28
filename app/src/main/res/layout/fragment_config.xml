@@ -53,10 +53,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
+        android:spinnerMode="dialog"
+        android:theme="@style/SpinnerTheme"
         app:layout_constraintBottom_toTopOf="@+id/tempConsigna"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textAjustes"
-        app:layout_constraintTop_toBottomOf="@+id/textAjustes" />
+        app:layout_constraintTop_toBottomOf="@+id/textAjustes"
+        />
 
     <TextView
         android:id="@+id/textTempConsigna"

@@ -71,7 +71,6 @@ public class DashboardFragment extends Fragment {
     private String queryJson = "";
     public  boolean detener = false;
     private JSONObject jsonObject;
-    private FloatingActionButton btnAnadirDispositivo;
     private FloatingActionButton btnPrueba;
     private Spinner spinnerDispositivos;
     private boolean primeraVez = true;
@@ -228,17 +227,6 @@ public class DashboardFragment extends Fragment {
         };
 
         btnPrueba = (FloatingActionButton) view.findViewById(R.id.botonPrueba);
-        btnAnadirDispositivo = (FloatingActionButton) view.findViewById(R.id.anadirDispFloatingButton);
-
-        //listener para el botón Añadir Dispositivo, nueva activity
-        btnAnadirDispositivo.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                //Abrimos activity de búsqueda de dispositivos BLE para sincronización
-                Intent intent = new Intent(getActivity(), BluetoothActivity.class);
-                startActivity(intent);
-            }
-        });
         btnPrueba.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

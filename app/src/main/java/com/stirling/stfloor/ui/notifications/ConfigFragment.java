@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 
 import com.google.gson.Gson;
@@ -47,6 +48,8 @@ public class ConfigFragment extends Fragment {
     private Retrofit retrofit;
     private ElasticSearchAPI searchAPI;
     private String macDispositivo;
+    private int consignaDispositivo;
+    private float sensibilidadDispositivo;
     private String mElasticSearchPassword = Constants.elasticPassword;
     private String queryJson = "";
     public  boolean detener = false;
@@ -56,6 +59,8 @@ public class ConfigFragment extends Fragment {
     private Dispositivo[] dispositivo;
     private ArrayList<String> nombreDisps;
     private FloatingActionButton btnAnadir;
+    private TextView textConsigna;
+    private TextView textSensibilidad;
 
 
     private Button botonGuardar;
@@ -85,6 +90,8 @@ public class ConfigFragment extends Fragment {
         btnAnadir = (FloatingActionButton) view.findViewById(R.id.anadirDispFloatingButton);
         nombreDisps = new ArrayList<>();
         spinnerDispConfiguracion = (Spinner) view.findViewById(R.id.spinnerDispConf);
+        textConsigna = (TextView) view.findViewById(R.id.tempConsigna);
+        textSensibilidad = (TextView) view.findViewById(R.id.nSensibilidad);
 
         //Obtenemos los dispositivos almacenados en SharedPreferences
         obtenerDesdeSharedPrefs();
@@ -98,7 +105,13 @@ public class ConfigFragment extends Fragment {
                 //Obtenemos la dirección MAC del dispositivo correspondiente a esa posición
                 //en el arrayList de dispositivos obtenidos.
                 macDispositivo = dispositivo[pos].getIdMac();
+                sensibilidadDispositivo = dispositivo[pos].getSensibilidad();
+                consignaDispositivo = dispositivo[pos].gettConsigna();
                 Log.d("Conf: ", "Dir. MAC del disp. selecc.: " + macDispositivo);
+
+                //Ahora actualizamos los campos de configuración con los valores obtenidos
+                textConsigna.setText(Integer.toString(consignaDispositivo));
+                textSensibilidad.setText(Float.toString(sensibilidadDispositivo));
             }
 
             @Override
