@@ -15,12 +15,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 
 import com.google.gson.Gson;
 import com.stirling.stfloor.BluetoothActivity;
+import com.stirling.stfloor.MainActivity;
 import com.stirling.stfloor.Models.POJOs.Dispositivo;
 import com.stirling.stfloor.Models.POJOs.RespuestaB;
 import com.stirling.stfloor.Models.POJOs.RespuestaU;
@@ -50,6 +52,7 @@ public class ConfigFragment extends Fragment {
     private Retrofit retrofit;
     private ElasticSearchAPI searchAPI;
     private String macDispositivo;
+    private String nombreDispositivo;
     private int consignaDispositivo;
     private float sensibilidadDispositivo;
     private String mElasticSearchPassword = Constants.elasticPassword;
@@ -61,8 +64,8 @@ public class ConfigFragment extends Fragment {
     private ArrayList<String> nombreDisps;
 
     private FloatingActionButton btnAnadir;
-    private TextView textConsigna;
-    private TextView textSensibilidad;
+    private TextView textSensibilidad, textConsigna;
+    private EditText nomHabit;
     private Spinner spinnerDispConfiguracion;
     private Button botonGuardar;
 
@@ -70,13 +73,7 @@ public class ConfigFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_config, container, false);
-        /*final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
+
         return root;
     }
     @Override
@@ -93,6 +90,7 @@ public class ConfigFragment extends Fragment {
         spinnerDispConfiguracion = (Spinner) view.findViewById(R.id.spinnerDispConf);
         textConsigna = (TextView) view.findViewById(R.id.tempConsigna);
         textSensibilidad = (TextView) view.findViewById(R.id.nSensibilidad);
+        nomHabit = (EditText) view.findViewById(R.id.nomHabCuadro);
 
         //Obtenemos los dispositivos almacenados en SharedPreferences
         obtenerDesdeSharedPrefs();
@@ -106,6 +104,7 @@ public class ConfigFragment extends Fragment {
                 //Obtenemos la dirección MAC del dispositivo correspondiente a esa posición
                 //en el arrayList de dispositivos obtenidos.
                 macDispositivo = dispositivo[pos].getIdMac();
+                nombreDispositivo = dispositivo[pos].getNombreHab();
                 sensibilidadDispositivo = dispositivo[pos].getSensibilidad();
                 consignaDispositivo = dispositivo[pos].gettConsigna();
                 Log.d("Conf: ", "Dir. MAC del disp. selecc.: " + macDispositivo);
@@ -113,6 +112,7 @@ public class ConfigFragment extends Fragment {
                 //Ahora actualizamos los campos de configuración con los valores obtenidos
                 textConsigna.setText(Integer.toString(consignaDispositivo));
                 textSensibilidad.setText(Float.toString(sensibilidadDispositivo));
+                nomHabit.setText(nombreDispositivo);
             }
 
             @Override
@@ -135,12 +135,16 @@ public class ConfigFragment extends Fragment {
             @Override
             public void onClick(View v){
                 //recogemos información introducida
-//                String textConsNuevo = textConsigna.getText().toString();
-//                String textSensNuevo = textSensibilidad.getText().toString();
+                String textConsNuevo = textConsigna.getText().toString();
+                String textSensNuevo = textSensibilidad.getText().toString();
+                String textNomNuevo = nomHabit.getText().toString();
                 //eliminamos la entrada de ese dispositivo
-                borrarDispositivo(macDispositivo);//PRIMERO SÓLO ESTO PARA PROBAR QUE SE ELIMINA
+                borrarDispositivo(macDispositivo);
                 //introducimos nueva entrada con los datos actualizados
-
+                enviarConfiguracion(macDispositivo, textNomNuevo, textConsNuevo, textSensNuevo);
+                //Actualizar lista de disps. en SharedPreferences con los cambios enviados a BD
+                actualizarLista();
+                obtenerDesdeSharedPrefs();
             }
         });
     }
@@ -293,6 +297,13 @@ public class ConfigFragment extends Fragment {
                 nombreDisps);
         //Asignamos al spinner el adapter
         spinnerDispConfiguracion.setAdapter(spinnerAdapter);
+    }
+
+    /**
+     * Ejecuta el método de MainActivity que solicita la lista de dispositivos a la base de datos
+     */
+    private void actualizarLista(){
+        ((MainActivity) getActivity()).obtenerDispositivos();
     }
 
     /**
