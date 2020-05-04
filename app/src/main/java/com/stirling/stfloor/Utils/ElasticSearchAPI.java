@@ -24,7 +24,7 @@ public interface ElasticSearchAPI {
                                        @Body RequestBody params);
 
     //Llamada para introducir un usuario nuevo dispositivo en la base de datos. //no utiliz.
-    @POST("/stf_dispositivos/_doc")
+    @POST("/stf_dispositivo/_doc")
     Call<RespuestaU> postDispReg(@HeaderMap Map<String, String> headers,
                                  @Body RequestBody params);
 

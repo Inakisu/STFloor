@@ -168,6 +168,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
         String json = gson.toJson(list);
+        //eliminamos datos anteriores
+        
+        //añadimos
         editor.putString(key, json);
         editor.apply();
     }

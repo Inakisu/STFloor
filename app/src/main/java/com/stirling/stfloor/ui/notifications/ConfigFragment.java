@@ -281,6 +281,9 @@ public class ConfigFragment extends Fragment {
      * Se obtiene desde sharedPreferences la lista de dispositivos obtenida en MainActivity
      */
     private void obtenerDesdeSharedPrefs(){
+        //Vaciamos el array nombreDisps
+        nombreDisps.clear();
+        //Obtenemos desde sharedPreferences
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String jsonString = prefs.getString("navprefs", null);
         Gson gson = new Gson();

@@ -567,95 +567,34 @@ public class BluetoothActivity extends AppCompatActivity {
 
             ble.write(Constants.SERVICE_UUID, Constants.PASSWORD_CHARACTERISTIC_UUID,pass);
             Log.i("Enviar info Wifi:", "Enviada contraseña");
-//            busquedaEntrada(obtenidaMACWiFi,email);
+////            busquedaEntrada(obtenidaMACWiFi,email);
+//            borrarLaCazuela(obtenidaMACWiFiString, email);
+//            addCazuelaUsuario(obtenidaMACWiFiString, email);
+            borrarDispositivo(obtenidaMACWiFiString);   //borramos en caso de que ya se haya configurado en el pasado
+            enviarConfiguracion(obtenidaMACWiFiString, obtenidaMACWiFiString, "20","5");
         }
     }
 
 
-    //por comprobar func. de la API
-    public void borrarLaCazuela(String macB, String correo){
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", Credentials.basic("android",
-                mElasticSearchPassword));
-        try{
-            queryJson = "{\n" +
-                        "  \"query\":{\n" +
-                        "    \"bool\":{\n" +
-                        "      \"must\":[\n" +
-                        "        {\n" +
-                        "          \"match\":{\n" +
-                        "            \"idMac\":\""+ macB +"\"\n" +
-                        "          }\n" +
-                        "        },\n" +
-                        "        {\n" +
-                        "          \"match\":{\n" +
-                        "            \"correousu\":\""+ correo +"\"\n" +
-                        "          }\n" +
-                        "        }\n" +
-                        "      ]\n" +
-                        "    }\n" +
-                        "  }\n" +
-                        "}";
-            jsonObject = new JSONObject(queryJson);
-        }catch (JSONException jerr){
-            Log.d("Error: ", jerr.toString());
-        }
-        //Creamos el body con el JSON
-        RequestBody body = RequestBody.create(okhttp3.MediaType
-                .parse("application/json; charset=utf-8"),(jsonObject.toString()));
-        Call<RespuestaB> call = searchAPI.deleteCazuela(headerMap, body);
-
-        call.enqueue(new Callback<RespuestaB>() {
-            @Override
-            public void onResponse(Call<RespuestaB> call, Response<RespuestaB> response) {
-                HitsListD hitsList = new HitsListD();
-                String jsonResponse = "";
-                try{
-                    Log.d(TAG, "onResponse borrar cazuela: server response: "
-                            + response.toString());
-
-                    if(response.isSuccessful()){
-                        //hitsList = response.body().getHits();
-                        Log.d(TAG, " onResponse borrar cazuela: response body: "+response.body()
-                                .toString());
-                    }else{
-                        jsonResponse = response.errorBody().string(); //error response body
-                    }
-
-                    Log.d(TAG, "onResponse borrar cazuela: data: " );
-
-                    //addCazuelaUsuario(macB, correo);
-                }catch (NullPointerException e){
-                    Log.e(TAG, "onResponse borrarCaz: " +
-                            "NullPointerException: " + e.getMessage() );
-                }
-                catch (IndexOutOfBoundsException e){
-                    Log.e(TAG, "onResponse borrarCaz:" +
-                            " IndexOutOfBoundsException: " + e.getMessage() );
-                }
-                catch (IOException e){
-                    Log.e(TAG, "onResponse borrarCaz: IOException: " + e.getMessage() );
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RespuestaB> call, Throwable t) {
-
-            }
-        });
-
-    }
-
-    public void addCazuelaUsuario(String macA, String correo){
+    /**
+     * Este método borrará la entrada del dispositivo especificado en el index stf_dispositivo
+     */
+    public void borrarDispositivo(String mac){
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", Credentials.basic("android",
                 mElasticSearchPassword));
         try {
             queryJson = "{\n" +
-                    "  \"idMac\":\""+ macA +"\",\n" +
-                    "  \"nombreCazuela\":\""+ macA +"\",\n" +
-                    "  \"correousu\":\""+ correo +"\",\n" +
-                    "  \"dueno\":true\n" +
+                    " \"query\":{ \n" +
+                    "    \"bool\":{\n" +
+                    "      \"must\": [\n" +
+                    "        {\"match\": {\n" +
+                    "          \"idMac\": \"" + mac + "\"\n" +
+                    "          }\n" +
+                    "        }\n" +
+                    "      ]\n" +
+                    "    }\n" +
+                    "  }\n" +
                     "}";
             jsonObject = new JSONObject(queryJson);
         }catch (JSONException jerr){
@@ -665,7 +604,70 @@ public class BluetoothActivity extends AppCompatActivity {
         RequestBody body = RequestBody.create(okhttp3.MediaType
                 .parse("application/json; charset=utf-8"),(jsonObject.toString()));
         //Realizamos la llamada mediante la API
-        Call<RespuestaU> call = searchAPI.postCazuela(headerMap, body);
+        Call<RespuestaB> call = searchAPI.deleteDispByQuery(headerMap, body);
+        call.enqueue(new Callback<RespuestaB>() {
+            @Override
+            public void onResponse(Call<RespuestaB> call, Response<RespuestaB> response) {
+                String jsonResponse = "";
+                try{
+                    Log.d(TAG, "onResponse borrarDispositivo");
+                    //Si la respuesta es satisfactoria
+                    if(response.isSuccessful()){
+                        Log.d(TAG, "onResponse borrarCazuela: Exitoso! Ole los caracole!: "+
+                                response.body().toString());
+                    }else{
+                        jsonResponse = response.errorBody().string(); //error response body
+                        Log.d(TAG, "onResponse borrarCazuela: NO successful..: "+
+                                response.body().toString());
+                    }
+
+                }catch (NullPointerException e){
+                    Log.e(TAG, "onResponse borrarDispositivo: NullPointerException: " + e.getMessage() );
+                }
+                catch (IndexOutOfBoundsException e){
+                    Log.e(TAG, "onResponse borrarDispositivo: IndexOutOfBoundsException: " +
+                            e.getMessage() );
+                }
+                catch (IOException e){
+                    Log.e(TAG, "onResponse borrarDispositivo: IOException: " + e.getMessage() );
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RespuestaB> call, Throwable t) {
+
+            }
+        });
+    }
+
+    /**
+     * Este método recoge los parámetros de configuración establecidos y los envía
+     *
+     * @param mac dirección MAC del dispositivo a modificar
+     * @param nombreHab Nuevo nombre de habitación
+     * @param tCons nuevo valor de temperatura de consigna deseada
+     * @param Sens nuevo valor de configuración de sensibilidad
+     */
+    public void enviarConfiguracion(String mac, String nombreHab, String tCons, String Sens){
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", Credentials.basic("android",
+                mElasticSearchPassword));
+        try {
+            queryJson = "{\n" +
+                    "  \"idMac\":\""+ mac +"\",\n" +
+                    "  \"nombreHab\":\""+ nombreHab +"\",\n" +
+                    "  \"tConsigna\":\""+ tCons +"\",\n" +
+                    "  \"sensibilidad\":"+ Sens + "\n" +
+                    "}";
+            jsonObject = new JSONObject(queryJson);
+        }catch (JSONException jerr){
+            Log.d("Error: ", jerr.toString());
+        }
+        //Creamos el body con el JSON
+        RequestBody body = RequestBody.create(okhttp3.MediaType
+                .parse("application/json; charset=utf-8"),(jsonObject.toString()));
+        //Realizamos la llamada mediante la API
+        Call<RespuestaU> call = searchAPI.postDispReg(headerMap, body);
         call.enqueue(new Callback<RespuestaU>() {
             @Override
             public void onResponse(Call<RespuestaU> call, Response<RespuestaU> response) {
