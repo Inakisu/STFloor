@@ -286,6 +286,7 @@ public class DashboardFragment extends Fragment {
      * Método que obtiene la lista de dispositivos desde SharedPreferences
      */
     private void obtenerDispsSharedPrefs(){ //Estoy hay que probarlo muy fuerte en el debugger
+        getContext().getSharedPreferences("navprefs", 0).edit().clear().commit();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String jsonString = prefs.getString("navprefs", null);
         Gson gson = new Gson();

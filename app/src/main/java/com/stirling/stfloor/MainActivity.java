@@ -130,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
                         jsonResponse = response.errorBody().string(); //error response body
                         Log.e("ErrES:", jsonResponse);
                     }
+                    //borramos para evitar duplicados de peticiones anteriores
+                    mDispositivo.clear();
                     for(int i = 0; i < hitsListD.getDispositivoIndex().size(); i++){
                         Log.d(TAG, "onResponse: data: " + hitsListD.getDispositivoIndex().get(i)
                                 .getDispositivo().toString());
@@ -169,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         //eliminamos datos anteriores
-        
+        prefs.edit().clear().commit();
         //añadimos
         editor.putString(key, json);
         editor.apply();
