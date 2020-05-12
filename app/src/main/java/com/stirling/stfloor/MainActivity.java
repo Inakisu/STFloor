@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         //eliminamos datos anteriores
-        prefs.edit().clear().commit();
+        editor.clear().commit();
         //añadimos
         editor.putString(key, json);
         editor.apply();

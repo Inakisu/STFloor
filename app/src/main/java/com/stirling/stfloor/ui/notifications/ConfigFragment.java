@@ -287,8 +287,6 @@ public class ConfigFragment extends Fragment {
         if(dispositivo != null){
             dispositivo = new Dispositivo[dispositivo.length];
         }
-        //Vaciamos SharedPreferences
-        getContext().getSharedPreferences("navprefs", 0).edit().clear().commit();
         //Obtenemos desde sharedPreferences
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String jsonString = prefs.getString("navprefs", null);
