@@ -11,10 +11,10 @@ public class Constants {
     public static final String CHARACTERISTIC_LAST_DISTANCE     = "D804380C-1C12-4EA9-9087-EA7F1B2E002E";
     public static final String CHARACTERISTIC_GEOFENCE          = "248E7733-1EA6-48BD-9815-5CD0B3CE377A";
 
-    public static final String SERVICE_UUID                     = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
-    public static final String SSID_CHARACTERISTIC_UUID         = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
-    public static final String PASSWORD_CHARACTERISTIC_UUID     = "beb5483e-36e1-4688-b7f5-ea07361b26a9";
-    public static final String SEND_WIFI_MAC_UUID               = "beb5483e-36e1-4688-b7f5-ea07361b26a7";
+    public static final String SERVICE_UUID                     = "4fafc201-1fb5-459e-8fcc-c5c9c331789b";
+    public static final String SSID_CHARACTERISTIC_UUID         = "beb5483e-36e1-4688-b7f5-eb07361b26a5";
+    public static final String PASSWORD_CHARACTERISTIC_UUID     = "beb5483e-36e1-4688-b7f5-eb07361b26a6";
+    public static final String SEND_WIFI_MAC_UUID               = "beb5483e-36e1-4688-b7f5-eb07361b26a4";
 
     public static final String URL_ELASTICSEARCH                = "http://sukaldatzen.ddns.net:9200/";//"http://10.128.0.104:9200/";//"http://172.20.1.24:9200/";
 

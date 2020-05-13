@@ -305,7 +305,7 @@ public class DashboardFragment extends Fragment {
         spinnerDispositivos.setAdapter(spinnerAdapter);
     }
 
-    private void actualizarValores(String mac){
+    private void actualizarValores(String mac){ //INACABADO
         //Generamos un authentication header para identificarnos contra Elasticsearch
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", Credentials.basic("android",
