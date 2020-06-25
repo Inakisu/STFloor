@@ -5,7 +5,7 @@ public class Dispositivo {
     private String idMac;
     private String nombreHab;
     private int tConsigna;
-    private int sensibilidad;
+    private int strTOU, strREL, strPROX, strPREL;
 
     public Dispositivo(){
 
@@ -13,11 +13,14 @@ public class Dispositivo {
 
     public String toString(){
         return "Dispositivo{" +
-                "idMac='"+idMac+'\''+
-                ", nombreHab='" + nombreHab + '\'' +
-                ", tConsigna='" + tConsigna + '\''+
-                ", sensibilidad='" + sensibilidad + '\''+
-                '}';
+                "idMac='"+idMac+"'"+
+                ", nombreHab='" + nombreHab + "'" +
+                ", tConsigna='" + tConsigna + "'"+
+                ", TOU_THRESH='" + strTOU +"'"+
+                ", REL_THRESH='" + strREL +"'"+
+                ", PROX_THRESH='" + strPROX +"'"+
+                ", PREL_THRESH='" + strPREL +"'"+
+                "}";
     }
 
     public String getIdMac() {
@@ -44,11 +47,35 @@ public class Dispositivo {
         this.tConsigna = tConsigna;
     }
 
-    public int getSensibilidad() {
-        return sensibilidad;
+    public int getStrTOU() {
+        return strTOU;
     }
 
-    public void setSensibilidad(int sensibilidad) {
-        this.sensibilidad = sensibilidad;
+    public void setStrTOU(int strTOU) {
+        this.strTOU = strTOU;
+    }
+
+    public int getStrREL() {
+        return strREL;
+    }
+
+    public void setStrREL(int strREL) {
+        this.strREL = strREL;
+    }
+
+    public int getStrPROX() {
+        return strPROX;
+    }
+
+    public void setStrPROX(int strPROX) {
+        this.strPROX = strPROX;
+    }
+
+    public int getStrPREL() {
+        return strPREL;
+    }
+
+    public void setStrPREL(int strPREL) {
+        this.strPREL = strPREL;
     }
 }

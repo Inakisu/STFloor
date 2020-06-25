@@ -176,7 +176,7 @@ public class DashboardFragment extends Fragment {
 //        data.add(new CustomHeatDataEntry("2", "1", 19,"#ffb74d"));
 //        data.add(new CustomHeatDataEntry("2", "2", 22 ,"#90caf9"));
 
-        data.add(new CustomHeatDataEntry("1", "1", 30));
+        data.add(new CustomHeatDataEntry("1", "1", 30));    //pruebas
         data.add(new CustomHeatDataEntry("1", "2", 21));
         data.add(new CustomHeatDataEntry("2", "1", 19));
         data.add(new CustomHeatDataEntry("2", "2", 22));
@@ -204,7 +204,7 @@ public class DashboardFragment extends Fragment {
                 int pos = spinnerDispositivos.getSelectedItemPosition();
                 //Obtenemos la dirección MAC del dispositivo correspondiente a esa posición
                 //en el arrayList de dispositivos obtenidos.
-                macDispositivo = dispositivo[pos].getIdMac();
+               // macDispositivo = dispositivo[pos].getIdMac();
                 Log.d("Dash: ", "Dir. MAC del disp. selecc.: " + macDispositivo);
             }
 
@@ -251,7 +251,8 @@ public class DashboardFragment extends Fragment {
 //        ft.detach(this).attach(this).commit();
         if(primeraVez){ //para que al añadir un nuevo dispositivo desde otra activity se actualice
 //            Log.e("ACT", "===================22222222222222===============");
-            obtenerDispsSharedPrefs();
+            //obtenerDispsSharedPrefs();
+            obtenerDispositivos();
             actualizarListaDispositivos();
         }
         detener = false;
@@ -279,7 +280,7 @@ public class DashboardFragment extends Fragment {
      * Ejecuta el método de MainActivity que solicita la lista de dispositivos a la base de datos
      */
     private void actualizarLista(){
-        ((MainActivity) getActivity()).obtenerDispositivos();
+//        ((MainActivity) getActivity()).obtenerDispositivos();
     }
 
     /**
@@ -299,8 +300,8 @@ public class DashboardFragment extends Fragment {
             System.out.println("Nombre hab prueba: " + no);
         }
         //Introducimos datos de la lista obtenida en el spinner
-        spinnerAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item,
-                nombreDisps);
+        spinnerAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
+                android.R.layout.simple_spinner_item, nombreDisps);
         //Asignamos al spinner el adapter
         spinnerDispositivos.setAdapter(spinnerAdapter);
     }
@@ -393,6 +394,81 @@ public class DashboardFragment extends Fragment {
 
         });
 
+    }
+    public void obtenerDispositivos(){
+        //Generamos un authentication header para identificarnos contra Elasticsearch
+        HashMap<String, String> headerMap = new HashMap<String, String>();
+        headerMap.put("Authorization", Credentials.basic("android",
+                mElasticSearchPassword));
+        try{
+            queryJson = "{\n" +
+                    "  \"query\": {\n" +
+                    "    \"bool\": {\n" +
+                    "      \"must\": [\n" +
+                    "        {\"match_all\": {\n" +
+                    "        }}\n" +
+                    "      ]\n" +
+                    "    }\n" +
+                    "  }" +
+                    "}";
+            jsonObject = new JSONObject(queryJson);
+        }catch (JSONException jerr){
+            Log.d("Error: ", jerr.toString());
+        }
+        // Creamos el Body con el JSON
+        RequestBody body = RequestBody.create(okhttp3.MediaType.
+                parse("application/json; charset=utf-8"), (jsonObject.toString()));
+        //Realizamos la llamada mediante la API
+        Call<HitsObjectD> call= searchAPI.searchDispositivo(headerMap, body);
+        call.enqueue(new Callback<HitsObjectD>() {
+            @Override
+            public void onResponse(Call<HitsObjectD> call, Response<HitsObjectD> response) {
+                Toast.makeText(getActivity().getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();//prueba
+                HitsListD hitsListD = new HitsListD();
+                String jsonResponse = "";
+                try{
+                    Log.d(TAG, "onResponse: server response: " + response.toString());
+                    //Si la respuesta es satisfactoria
+                    if(response.isSuccessful()){
+                        Log.d(TAG, "repsonseBody: "+ response.body().toString());
+                        hitsListD = response.body().getHits();
+                        Log.d(TAG, " -----------onResponse: la response: "+response.body()
+                                .toString());
+                    }else{
+                        jsonResponse = response.errorBody().string(); //error response body
+                        Log.e("ErrES:", jsonResponse);
+                    }
+                    //borramos para evitar duplicados de peticiones anteriores
+                    mDispositivo.clear();
+                    for(int i = 0; i < hitsListD.getDispositivoIndex().size(); i++){
+                        Log.d(TAG, "onResponse: data: " + hitsListD.getDispositivoIndex().get(i)
+                                .getDispositivo().toString());
+                        mDispositivo.add(hitsListD.getDispositivoIndex().get(i).getDispositivo());
+                        nombreDisps.add(hitsListD.getDispositivoIndex().get(i)
+                                .getDispositivo().getNombreHab());
+                    }
+                    spinnerAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
+                            android.R.layout.simple_spinner_item, nombreDisps);
+                    //Asignamos al spinner el adapter
+                    spinnerDispositivos.setAdapter(spinnerAdapter);
+                }catch (NullPointerException e){
+                    Log.e(TAG, "onResponse: NullPointerException: " + e.getMessage() );
+                }
+                catch (IndexOutOfBoundsException e){
+                    Log.e(TAG, "onResponse: IndexOutOfBoundsException: " + e.getMessage() );
+                }
+                catch (IOException e){
+                    Log.e(TAG, "onResponse: IOException: " + e.getMessage() );
+                }
+            }
+
+            @Override
+            public void onFailure(Call<HitsObjectD> call, Throwable t) {
+                Toast.makeText(getActivity().getApplicationContext(), "Failure", Toast.LENGTH_SHORT).show();//prueba
+                Log.e("onFailure: ", t.toString());
+            }
+
+        });
     }
     private void actualizarListaDispositivos(){
         /*//Generamos un authentication header para identificarnos contra Elasticsearch

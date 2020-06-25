@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private VisualizacionFragment visualizacionFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { //no controlo el navcontroller
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -74,20 +74,20 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         //Inicializamos la API de Elasticsearch
-        inicializarAPI();
+        /*inicializarAPI();
 
         //Inicializamos variables
         mDispositivo = new ArrayList<Dispositivo>(); //Lista de dispositivos que hay en la BD
 
         //Obtenemos lista de dispositivos
-        obtenerDispositivos();
+        obtenerDispositivos();*/
 
     }
 
     /**
      * Obtenemos listado de dispositivos desde la BD para guardarlos en arrayList
      */
-    public void obtenerDispositivos(){
+    /*public void obtenerDispositivos(){
         //Generamos un authentication header para identificarnos contra Elasticsearch
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", Credentials.basic("android",
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-    }
+    }*/
 
     /**
      * Método para guardar en SharedPreferences un Arraylist
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
      * @param list
      * @param key
      */
-    public void saveArrayList(ArrayList<Dispositivo> list, String key){
+    /*public void saveArrayList(ArrayList<Dispositivo> list, String key){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
@@ -175,17 +175,17 @@ public class MainActivity extends AppCompatActivity {
         //añadimos
         editor.putString(key, json);
         editor.apply();
-    }
+    }*/
 
     /**
      * Se inicializa la API de Elasticsearch en la URL especificada
      */
-    private void inicializarAPI(){
+    /*private void inicializarAPI(){
         retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.URL_ELASTICSEARCH)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         searchAPI = retrofit.create(ElasticSearchAPI.class);
-    }
+    }*/
 
 }

@@ -216,16 +216,18 @@ public class BluetoothActivity extends AppCompatActivity {
                 if (status == BluetoothGatt.GATT_SUCCESS) {
                     Log.i("TAG", Arrays.toString(characteristic.getValue()));
                     runOnUiThread(() -> Toast.makeText(BluetoothActivity.this,
-                            "onCharacteristicRead : "+Arrays.toString(characteristic
+                            "onCharacteristicRead : " + Arrays.toString(characteristic
                                     .getValue()), Toast.LENGTH_SHORT).show());
 
+                    obtenidaMACWiFi = "";
                     //Intentar obtener una dirección MAC escrita en hexadecimal
                     obtenidaMACWiFi = Arrays.toString(characteristic.getValue());
                     //obtenidaMACWiFi = obtenidaMACWiFi.substring(obtenidaMACWiFi.length()-70);
-                    obtenidaMACWiFi = obtenidaMACWiFi.substring(1,67);
+                    obtenidaMACWiFi = obtenidaMACWiFi.substring(1,69);
                     obtenidaMACWiFi = obtenidaMACWiFi.replaceAll(" ","");
 
                     String[] parts = obtenidaMACWiFi.split(",");
+                    obtenidaMACWiFiString = "";
                     for(int i = 0; i < parts.length ; i++){
                         byte[] bytes = {};
                         String tradHex = Integer.toHexString(Integer.parseInt(parts[i]));
@@ -472,7 +474,7 @@ public class BluetoothActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT, true);
         popupWindow2.setAnimationStyle(R.style.DialogAnimation);
 
-        //Obtenemos la dirección MAC del WiFi del módulo
+        //Obtenemos la dirección MAC del WiFi del módulo - en un principio estaba aquí
         obtenerMacModulo();
         //Mostrar la ventana pop-up
         popupWindow2.showAtLocation(relativeLayout, Gravity.CENTER, 0, 0);
@@ -491,6 +493,9 @@ public class BluetoothActivity extends AppCompatActivity {
                 popupWindow2.dismiss();
                 progressBar32.setVisibility(View.GONE);
                 botonAceptar2.setVisibility(View.VISIBLE);
+
+                //Obtenemos la dirección MAC del WiFi del módulo
+               // obtenerMacModulo();
 
                 mandarWiFiaModulo(getWifiConectado(), wifiPassIntrod2);
             }
@@ -516,7 +521,7 @@ public class BluetoothActivity extends AppCompatActivity {
         popupWindow.setAnimationStyle(R.style.DialogAnimation);
 
         //Obtenemos la dirección MAC del WiFi del módulo
-        obtenerMacModulo();
+       // obtenerMacModulo();
 
         //Mostrar la ventana pop up
         popupWindow.showAtLocation(relativeLayout, Gravity.CENTER, 0, 0);
@@ -548,6 +553,11 @@ public class BluetoothActivity extends AppCompatActivity {
         if(ble.isConnected()){
             ble.read(Constants.SERVICE_UUID,Constants.SEND_WIFI_MAC_UUID);
            // bleCallback.onBleRead();
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }else{
             Log.e("obtenerMacModulo","ble no está conectado!!");
             System.out.println("ble no conectado!");
@@ -571,7 +581,8 @@ public class BluetoothActivity extends AppCompatActivity {
 //            borrarLaCazuela(obtenidaMACWiFiString, email);
 //            addCazuelaUsuario(obtenidaMACWiFiString, email);
             borrarDispositivo(obtenidaMACWiFiString);   //borramos en caso de que ya se haya configurado en el pasado
-            enviarConfiguracion(obtenidaMACWiFiString, obtenidaMACWiFiString, "20","5");
+            enviarConfiguracion(obtenidaMACWiFiString, obtenidaMACWiFiString, "20",
+                    "200", "200", "60", "60");
         }
     }
 
@@ -646,9 +657,10 @@ public class BluetoothActivity extends AppCompatActivity {
      * @param mac dirección MAC del dispositivo a modificar
      * @param nombreHab Nuevo nombre de habitación
      * @param tCons nuevo valor de temperatura de consigna deseada
-     * @param Sens nuevo valor de configuración de sensibilidad
+     * @param sensTOU nuevo valor de configuración de sensibilidad
      */
-    public void enviarConfiguracion(String mac, String nombreHab, String tCons, String Sens){
+    public void enviarConfiguracion(String mac, String nombreHab, String tCons, String sensTOU,
+                                    String sensREL, String sensPROX, String sensPREL){
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", Credentials.basic("android",
                 mElasticSearchPassword));
@@ -657,7 +669,10 @@ public class BluetoothActivity extends AppCompatActivity {
                     "  \"idMac\":\""+ mac +"\",\n" +
                     "  \"nombreHab\":\""+ nombreHab +"\",\n" +
                     "  \"tConsigna\":\""+ tCons +"\",\n" +
-                    "  \"sensibilidad\":"+ Sens + "\n" +
+                    "  \"TOU_THRESH\":\""+ sensTOU +"\",\n" +
+                    "  \"REL_THRESH\":\""+ sensREL +"\",\n" +
+                    "  \"PROX_THRESH\":\""+ sensPROX +"\",\n" +
+                    "  \"PREL_THRESH\":\""+ sensPREL + "\"\n" +
                     "}";
             jsonObject = new JSONObject(queryJson);
         }catch (JSONException jerr){

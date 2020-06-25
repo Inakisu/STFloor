@@ -50,7 +50,7 @@ public interface ElasticSearchAPI {
                                    @Body RequestBody params);
 
     //Llamada para obtener información acerca de una medición. En example
-    @POST("/mediciones_sukaldatzen/_search")
+    @POST("/tsf_mediciontabla/_search")
     Call<Example> searchMedicion(@HeaderMap Map<String, String> headers,
                                  @Body RequestBody params);
 

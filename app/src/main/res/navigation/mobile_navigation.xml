@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.stirling.stfloor.ui.notifications.ConfigFragment"
+        android:name="com.stirling.stfloor.ui.configuration.ConfigFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_config" />
 </navigation>

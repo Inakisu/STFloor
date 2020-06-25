@@ -6,6 +6,98 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <EditText
+        android:id="@+id/textPREL"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:fontFamily="@font/comfortaa"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textPROX" />
+
+    <TextView
+        android:id="@+id/nPREL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/comfortaa"
+        android:text="PREL_THRESH"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textPREL"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textPREL" />
+
+    <EditText
+        android:id="@+id/textPROX"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:fontFamily="@font/comfortaa"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtREL" />
+
+    <TextView
+        android:id="@+id/nPROX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/comfortaa"
+        android:text="PROX_THRESH"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textPROX"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textPROX" />
+
+    <TextView
+        android:id="@+id/nREL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/comfortaa"
+        android:text="REL_THRESH"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/txtREL"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtREL" />
+
+    <EditText
+        android:id="@+id/txtREL"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:fontFamily="@font/comfortaa"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textTOU" />
+
+    <TextView
+        android:id="@+id/nTOU"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:fontFamily="@font/comfortaa"
+        android:text="TOU_THRESH: "
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textTOU"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textTOU" />
+
+    <EditText
+        android:id="@+id/textTOU"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:fontFamily="@font/comfortaa"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nomHabCuadro" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/anadirDispFloatingButton"
         android:layout_width="wrap_content"
@@ -24,7 +116,7 @@
         android:id="@+id/text_dashboard2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/comfortaa"
         android:text="Añadir dispositivo"
         android:textAlignment="center"
@@ -71,18 +163,6 @@
         app:layout_constraintTop_toTopOf="@+id/tempConsigna" />
 
     <TextView
-        android:id="@+id/textSens"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:fontFamily="@font/comfortaa"
-        android:text="Sensibilidad:"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/nSensibilidad"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/nSensibilidad" />
-
-    <TextView
         android:id="@+id/textNombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -107,40 +187,27 @@
         app:layout_constraintTop_toBottomOf="@+id/spinnerDispConf" />
 
     <EditText
-        android:id="@+id/nSensibilidad"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:fontFamily="@font/comfortaa"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tempConsigna" />
-
-    <EditText
         android:id="@+id/nomHabCuadro"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:fontFamily="@font/comfortaa"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nSensibilidad" />
+        app:layout_constraintTop_toBottomOf="@+id/tempConsigna" />
 
     <Button
         android:id="@+id/botonGuardar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="#6300897B"
         android:text="Guardar cambios"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nomHabCuadro" />
+        app:layout_constraintTop_toBottomOf="@+id/textPREL" />
 
 </android.support.constraint.ConstraintLayout>
