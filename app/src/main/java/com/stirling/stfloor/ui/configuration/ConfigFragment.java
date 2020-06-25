@@ -122,10 +122,14 @@ public class ConfigFragment extends Fragment {
                 //Update configuration fragment EditText fields
                 textConsigna.setText(Integer.toString(consignaDispositivo));
                 nomHabit.setText(nombreDispositivo);
-                textTOU.setText(String.valueOf(strTOU));
-                textREL.setText(String.valueOf(strREL));
-                textPROX.setText(String.valueOf(strPROX));
-                textPREL.setText(String.valueOf(strPREL));
+                textTOU.setText(Integer.toString(strTOU));
+                textREL.setText(Integer.toString(strREL));
+                textPROX.setText(Integer.toString(strPROX));
+                textPREL.setText(Integer.toString(strPREL));
+//                textTOU.setText(String.valueOf(strTOU));
+//                textREL.setText(String.valueOf(strREL));
+//                textPROX.setText(String.valueOf(strPROX));
+//                textPREL.setText(String.valueOf(strPREL));
             }
 
             @Override

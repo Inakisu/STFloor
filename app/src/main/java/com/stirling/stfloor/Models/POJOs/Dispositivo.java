@@ -1,11 +1,31 @@
 package com.stirling.stfloor.Models.POJOs;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Dispositivo {
 
+    @SerializedName("idMac")
+    @Expose
     private String idMac;
+    @SerializedName("nombreHab")
+    @Expose
     private String nombreHab;
+    @SerializedName("tConsigna")
+    @Expose
     private int tConsigna;
-    private int strTOU, strREL, strPROX, strPREL;
+    @SerializedName("TOU_THRESH")
+    @Expose
+    private int strTOU;
+    @SerializedName("REL_THRESH")
+    @Expose
+    private int strREL;
+    @SerializedName("PROX_THRESH")
+    @Expose
+    private int strPROX;
+    @SerializedName("PREL_THRESH")
+    @Expose
+    private int strPREL;
 
     public Dispositivo(){
 
@@ -16,7 +36,7 @@ public class Dispositivo {
                 "idMac='"+idMac+"'"+
                 ", nombreHab='" + nombreHab + "'" +
                 ", tConsigna='" + tConsigna + "'"+
-                ", TOU_THRESH='" + strTOU +"'"+
+                ", TOUTHRESH='" + strTOU +"'"+
                 ", REL_THRESH='" + strREL +"'"+
                 ", PROX_THRESH='" + strPROX +"'"+
                 ", PREL_THRESH='" + strPREL +"'"+
