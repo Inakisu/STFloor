@@ -223,7 +223,7 @@ public class BluetoothActivity extends AppCompatActivity {
                     //Intentar obtener una dirección MAC escrita en hexadecimal
                     obtenidaMACWiFi = Arrays.toString(characteristic.getValue());
                     //obtenidaMACWiFi = obtenidaMACWiFi.substring(obtenidaMACWiFi.length()-70);
-                    obtenidaMACWiFi = obtenidaMACWiFi.substring(1,69);
+                    obtenidaMACWiFi = obtenidaMACWiFi.substring(1,obtenidaMACWiFi.length()-1);
                     obtenidaMACWiFi = obtenidaMACWiFi.replaceAll(" ","");
 
                     String[] parts = obtenidaMACWiFi.split(",");

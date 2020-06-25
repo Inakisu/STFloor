@@ -1,10 +1,15 @@
 package com.stirling.stfloor;
 
+import android.app.FragmentTransaction;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -54,10 +59,6 @@ public class MainActivity extends AppCompatActivity {
     private JSONObject jsonObject;
 
     private ArrayList<Dispositivo> mDispositivo; // Lista donde se almacenarán las respuestas de la query de las cazuelas
-
-    private DashboardFragment dashboardFragment;
-    private HomeFragment homeFragment;
-    private VisualizacionFragment visualizacionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //no controlo el navcontroller
@@ -187,5 +188,12 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         searchAPI = retrofit.create(ElasticSearchAPI.class);
     }*/
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+    }
 
 }

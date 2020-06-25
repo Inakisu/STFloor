@@ -164,6 +164,8 @@ public class ConfigFragment extends Fragment {
                 if(!nombreDisps.isEmpty()){
                     nombreDisps.clear();
                 }
+                //refreshes this fragment after click on button 'save'. It doesn't reload spinner!
+                refresFrag();
             }
         });
     }
@@ -441,5 +443,16 @@ public class ConfigFragment extends Fragment {
                 .build();
         searchAPI = retrofit.create(ElasticSearchAPI.class);
 
+    }
+
+    private void refresFrag(){
+        if (getFragmentManager() != null) {
+
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
     }
 }

@@ -1,6 +1,4 @@
 package com.stirling.stfloor.Utils;
-
-import com.stirling.stfloor.Models.HitsObjects.HitsObject;
 import com.stirling.stfloor.Models.HitsObjects.HitsObjectD;
 import com.stirling.stfloor.Models.POJOs.RespuestaB;
 import com.stirling.stfloor.Models.POJOs.RespuestaU;
